@@ -12,9 +12,8 @@ public abstract class User {
 	
 	private String email;
 	
-	private String securityQuestion;
-	
-	private String securityAnswer;
+	private String securityQuestion;  // thought about it some more and the answer is given by the "user"
+									// when they want there password so we don't need it here
 	
 	User(){
 		
@@ -69,32 +68,20 @@ public abstract class User {
 		this.securityQuestion = securityQuestion;
 	}
 
-	public String getSecurityAnswer() {
-		return securityAnswer;
-	}
-
-	public void setSecurityAnswer(String securityAnswer) {
-		this.securityAnswer = securityAnswer;
-	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
 	
-	public String getPassword() { // use to give the user their password when they forget only if they have securityAnswer
-		// not putting security here because security will be in Customer and Admin classes
-		
+	public String getPassword() { 
 		return this.password;
 	}
 	
-	public void bookFlight() { // use to register a user (and friends) on a flight
+	public abstract void bookFlight();// use to register a user (and friends) on a flight
 		// details unknown
-		
-	}
 	
-	public void removeFlight() { // use to remove a booking from a flight
+	public abstract void removeFlight(Object flight); // use to remove a booking from a flight
 		// details unknown
-	}
-
+	
+	public abstract Object getFlight(); // use to get flights from the database
 
 }

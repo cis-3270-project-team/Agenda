@@ -36,7 +36,14 @@ public class Customer extends User {
 	}
 	
 	@Override
-	public void removeFlight() { // use to remove a booking from a flight
+	public void removeFlight(Object flight) {// use to remove a booking from a flight
 		// details unknown
+		
+	}
+
+	@Override
+	public Object getFlight() { // use to get flights from the database
+		// details unknown
+		return null;
 	}
 }
