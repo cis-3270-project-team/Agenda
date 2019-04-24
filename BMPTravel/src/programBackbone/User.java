@@ -12,8 +12,9 @@ public abstract class User {
 	
 	private String email;
 	
-	private String securityQuestion;  // thought about it some more and the answer is given by the "user"
-									// when they want there password so we don't need it here
+	private String securityQuestion;  
+									
+	private String securityAnswer;  
 	
 	User(){
 		
@@ -66,6 +67,14 @@ public abstract class User {
 
 	public void setSecurityQuestion(String securityQuestion) {
 		this.securityQuestion = securityQuestion;
+	}
+	
+	public String getSecurityAnswer() {
+		return securityAnswer;
+	}
+	
+	public void setSecurityAnswer(String securityAnswer) {
+		this.securityAnswer = securityAnswer;
 	}
 
 	public void setPassword(String password) {

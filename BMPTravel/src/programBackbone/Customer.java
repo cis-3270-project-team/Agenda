@@ -2,13 +2,13 @@ package programBackbone;
 
 public class Customer extends User {
 
-	String address;
+	private String address;
 	
-	String state;
+	private String state;
 	
-	int zip;
+	private int zip;
 	
-	int sSN;
+	private int sSN;
 	
 	Customer(){
 		
@@ -19,6 +19,38 @@ public class Customer extends User {
 		this.address = address;
 		this.state = state;
 		this.zip = zip;
+		this.sSN = sSN;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public int getZip() {
+		return zip;
+	}
+
+	public void setZip(int zip) {
+		this.zip = zip;
+	}
+
+	public int getsSN() {
+		return sSN;
+	}
+
+	public void setsSN(int sSN) {
 		this.sSN = sSN;
 	}
 	
@@ -46,4 +78,6 @@ public class Customer extends User {
 		// details unknown
 		return null;
 	}
+
+
 }

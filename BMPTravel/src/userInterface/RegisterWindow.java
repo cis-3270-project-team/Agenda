@@ -2,7 +2,6 @@ package userInterface;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -15,7 +14,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class RegisetWindow extends Application{
+public class RegisterWindow extends Application{
 
 	Label fisstNameLB, lastNameLB, addressLB, zipLB, userNameLB, passwordLB, emailLB, ssnLB, secQuestionLB, secAnswerLB;
 	

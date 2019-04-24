@@ -33,6 +33,7 @@ public class MainMenu extends Application{
 		
 		loginBT = new Button("Log in");
 		registerBT = new Button("Register");
+	//	registerBT.setOnAction(e -> RegisetWindow.d);
 		exitBT = new Button("Exit");
 		
 		vBox = new VBox();
