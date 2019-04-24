@@ -1,80 +1,141 @@
 package Objects;
 
-import java.security.PrivateKey;
+
 import java.util.Date;
-import java.util.Time;
+
 
 public class Flights {
 
-    Private String airline;
-    Private String originCity;
-    Private String destinationCityl;
-    Private int flightCapacity;
-    Private int flightNumber;
-    Private Date departureDate;
-    Private Date arrivalDate;
-    Private Time departureTiume;
-    Private Time arrivalTime;
-    Private Time TimeStamp;
-    Private Boolean isFilled;
+	public static void main(String[]args){
+		
+	}
+    private String airline;
+    private String originCity;
+    private String destinationCity;
+    private int flightCapacity;
+    private int flightNumber;
+    private Date departureDate;
+    private Date arrivalDate;
+    private Date departureTime;
+    private Date arrivalTime;
+    private Boolean isFilled;
 
     public Flights() {
 
     }
 
-    public Flights(String airline, String originCity, String destinationCity, int flightCapacity, int flightNumber, Date departureDate, Date arrivalDate, Time departureTime, Time arrivalTime) 
+    public Flights(String airline, String originCity, String destinationCity, int flightCapacity,int flightNumber, Date departureDate, Date arrivalDate, Date departureTime, Date arrivalTime) 
     {
-    	Super();
     	this.airline = airline;
     	this.originCity = originCity;
         this.destinationCity = destinationCity;
         this.flightCapacity = flightCapacity;
         this.flightNumber = flightNumber;
         this.departureDate = departureDate;
-        this.arrivalTime = arrivalTime
+        this.arrivalTime = arrivalTime;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
     }
 
+	public String getAirline() {
+		return airline;
+	}
 
-    public String getairline(){
-       return airline;
-    }
-    
-    public void setAirline(String airline) {
-        this.airline = airline;
-    }
-    
-    public String getoriginCity() {
-        return originCity;
-    }
-    
-    public void setOriginCity(String originCity) {
-        this.originCity = originCity;
-    }
-    
-    public String getdestinationCity() {
-        return destinationCity;
-    }
-    
-    public void setDestinationCity(String destinationCity) {
-        this.destinationCity = destinationCity;
-    }
+	public void setAirline(String airline) {
+		this.airline = airline;
+	}
 
-    public int getFlightCapacity() {
-        return flightCapacity;
-    }
+	public String getOriginCity() {
+		return originCity;
+	}
 
-    public void setFlightCapacity(int flightCapacity) {
-        this.flightCapacity = flightCapacity;
-    }
+	public void setOriginCity(String originCity) {
+		this.originCity = originCity;
+	}
 
-    public int getFlightNumber() {
-        return flightNumber;
-    }
+	public String getDestinationCity() {
+		return destinationCity;
+	}
 
-    public void setFlightNumber(int flightNumber) {
-        this.flightNumber = flightNumber;
-    }
+	public void setDestinationCity(String destinationCity) {
+		this.destinationCity = destinationCity;
+	}
+
+	public int getFlightCapacity() {
+		return flightCapacity;
+	}
+
+	public void setFlightCapacity(int flightCapacity) {
+		this.flightCapacity = flightCapacity;
+	}
+
+	public int getFlightNumber() {
+		return flightNumber;
+	}
+
+	public void setFlightNumber(int flightNumber) {
+		this.flightNumber = flightNumber;
+	}
+
+	public Date getDepartureDate() {
+		return departureDate;
+	}
+
+	public void setDepartureDate(Date departureDate) {
+		this.departureDate = departureDate;
+	}
+
+	public Date getArrivalDate() {
+		return arrivalDate;
+	}
+
+	public void setArrivalDate(Date arrivalDate) {
+		this.arrivalDate = arrivalDate;
+	}
+
+	public Date getDepartureTime() {
+		return departureTime;
+	}
+
+	public void setDepartureTime(Date departureTime) {
+		this.departureTime = departureTime;
+	}
+
+	public Date getArrivalTime() {
+		return arrivalTime;
+	}
+
+	public void setArrivalTime(Date arrivalTime) {
+		this.arrivalTime = arrivalTime;
+	}
+
+	public Boolean getIsFilled() {
+		return isFilled;
+	}
+
+	public void setIsFilled(Boolean isFilled) {
+		this.isFilled = isFilled;
+	}
+
+	@Override
+	public String toString() {
+		return "Flights [airline=" + airline + ", originCity=" + originCity
+				+ ", destinationCity=" + destinationCity + ", flightCapacity="
+				+ flightCapacity + ", flightNumber=" + flightNumber
+				+ ", departureDate=" + departureDate + ", arrivalDate="
+				+ arrivalDate + ", departureTime=" + departureTime
+				+ ", arrivalTime=" + arrivalTime + ", isFilled=" + isFilled
+				+ ", getAirline()=" + getAirline() + ", getOriginCity()="
+				+ getOriginCity() + ", getDestinationCity()="
+				+ getDestinationCity() + ", getFlightCapacity()="
+				+ getFlightCapacity() + ", getFlightNumber()="
+				+ getFlightNumber() + ", getDepartureDate()="
+				+ getDepartureDate() + ", getArrivalDate()=" + getArrivalDate()
+				+ ", getDepartureTime()=" + getDepartureTime()
+				+ ", getArrivalTime()=" + getArrivalTime() + ", getIsFilled()="
+				+ getIsFilled() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + ", toString()="
+				+ super.toString() + "]";
+	}
+}
     
-    public Date
