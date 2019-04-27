@@ -36,10 +36,10 @@ public class RegisterWindow extends Application{
 	
 	Region emptySpace = new Region();
 	
-	public static void main(String[] args) {
-		launch(args);
+//	public static void main(String[] args) {
+//		launch(args);
 
-	}
+//	}
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {

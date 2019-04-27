@@ -1,7 +1,9 @@
 package programBackbone;
 
 public class Admin extends User {
-
+	
+		private int accountType = 1;
+		
 	Admin(){
 		
 	}
