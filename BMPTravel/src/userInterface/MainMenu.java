@@ -33,7 +33,7 @@ public class MainMenu extends Application{
 		
 		loginBT = new Button("Log in");
 		registerBT = new Button("Register");
-		registerBT.setOnAction(e -> window.setScene(RegistrWindow));
+//		registerBT.setOnAction(e -> window.setScene(RegistrWindow));
 
 		exitBT = new Button("Exit");
 		

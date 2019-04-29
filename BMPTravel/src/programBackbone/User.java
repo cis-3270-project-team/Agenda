@@ -14,19 +14,21 @@ public abstract class User {
 	
 	private String securityQuestion;  
 									
-	private String securityAnswer;  
+	private String securityAnswer;
 	
 	User(){
 		
 	}
 	
-	User(String firstN, String lastN, String userN, String pass, String email, String securityQ){
+	User(String firstN, String lastN, String userN, String pass, String email, String securityQ, String securityA){
 		firstName = firstN;
 		lastName = lastN;
 		userName = userN;
 		password = pass;
 		this.email = email;
 		securityQuestion = securityQ;
+		securityAnswer = securityA;
+		
 	}
 	
 	public String getFirstName() {
