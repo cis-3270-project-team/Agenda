@@ -1,4 +1,4 @@
-package Objects;
+package programBackbone;
 
 
 import java.util.Date;
@@ -16,15 +16,26 @@ public class Flights {
     private int flightNumber;
     private Date departureDate;
     private Date arrivalDate;
-    private Date departureTime;
-    private Date arrivalTime;
+    private String departureTime;
+    private String arrivalTime;
     private Boolean isFilled;
 
     public Flights() {
 
     }
 
-    public Flights(String airline, String originCity, String destinationCity, int flightCapacity,int flightNumber, Date departureDate, Date arrivalDate, Date departureTime, Date arrivalTime) 
+	public Flights(String origin_city, String destination_city, java.sql.Date departure_date, String departure_time,
+			int seats_available) {
+		this.originCity = origin_city;
+		this.destinationCity = destination_city;
+		this.departureDate = departure_date;
+		this.departureTime = departure_time;
+//	commented out the seats available because they might be placed somewhere else
+//		this.seatsAvailable = seats_available;
+	}
+
+    public Flights(String airline, String originCity, String destinationCity, int flightCapacity,int flightNumber, 
+    		Date departureDate, Date arrivalDate, String departureTime, String arrivalTime) 
     {
     	this.airline = airline;
     	this.originCity = originCity;
@@ -93,19 +104,19 @@ public class Flights {
 		this.arrivalDate = arrivalDate;
 	}
 
-	public Date getDepartureTime() {
+	public String getDepartureTime() {
 		return departureTime;
 	}
 
-	public void setDepartureTime(Date departureTime) {
+	public void setDepartureTime(String departureTime) {
 		this.departureTime = departureTime;
 	}
 
-	public Date getArrivalTime() {
+	public String getArrivalTime() {
 		return arrivalTime;
 	}
 
-	public void setArrivalTime(Date arrivalTime) {
+	public void setArrivalTime(String arrivalTime) {
 		this.arrivalTime = arrivalTime;
 	}
 

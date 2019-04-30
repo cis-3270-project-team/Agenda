@@ -27,6 +27,10 @@ public class Customer extends User {
 		this.sSN = sSN;
 	}
 	
+	public Customer(String firstName, String lastName, String userName, String email) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getAddress() {
 		return address;
 	}
@@ -79,30 +83,22 @@ public class Customer extends User {
 	}
 
 	@Override
-	public Object[] getFlight() { // use to get flights from the database
+	public ArrayList<Flights> getFlight() { 
 		
-		ArrayList<Flights> f1 = new ArrayList<>();
+		ArrayList<Flights> f1 = new ArrayList<>(Method.SearchFlights());
 		
-		try {
-			Connection conn = Method.getConnection();
-			Statement Stmt = conn.createStatement();
-			ResultSet Rs = Stmt.executeQuery("select * from flights");
-			
-			while(Rs.next()) {
-				f1.add(Rs.getString(columnIndex)); // should repeat Rs.getString() for all the flight properties
-			}
+		if (f1.isEmpty()) {
+			return null;
 		}
-		catch (Exception e) {
-			System.out.println(e);
-		}
-		return null;
+	
+		return f1;
 	}
 	
 	public void register(Customer c1) {
 
-		
 		try {
-			Method.insertIntoDatabase(c1);
+			//use method in Method to register the Customer
+			Method.registerUser(c1);
 			
 		}
 		catch (Exception e){

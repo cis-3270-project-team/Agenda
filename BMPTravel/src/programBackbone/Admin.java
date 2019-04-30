@@ -7,8 +7,14 @@ public class Admin extends User {
 	Admin(){
 		
 	}
-	Admin(String firstN, String lastN, String userN, String pass, String email, String securityQ){
-		super(firstN, lastN, userN, pass, email, securityQ);
+	
+	Admin(String firstN, String lastN, String userN, String email){
+		super(firstN, lastN, userN, email);
+		
+	}
+		
+	Admin(String firstN, String lastN, String userN, String pass, String email, String securityQ, String securityA){
+		super(firstN, lastN, userN, pass, email, securityQ, securityA);
 	}
 	
 	@Override
@@ -39,6 +45,11 @@ public class Admin extends User {
 	
 	public void deleteFlight(){ // use to remove flights from the database
 		// details unknown
+	}
+	
+	public void register(Admin a1) {
+		
+			Method.registerUser(a1);
 	}
 	
 }

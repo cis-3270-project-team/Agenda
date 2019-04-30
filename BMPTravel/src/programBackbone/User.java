@@ -16,8 +16,17 @@ public abstract class User {
 									
 	private String securityAnswer;
 	
+	int accountType;
+	
 	User(){
 		
+	}
+	
+	User (String firstN, String lastN, String userN, String email){
+		firstName = firstN;
+		lastName = lastN;
+		userName = userN;
+		this.email = email;
 	}
 	
 	User(String firstN, String lastN, String userN, String pass, String email, String securityQ, String securityA){

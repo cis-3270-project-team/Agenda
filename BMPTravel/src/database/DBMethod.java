@@ -14,7 +14,7 @@ public class DBMethod {
 			
 			PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS flight(id int NOT NULL, numberflight int, "
 					+ "airline varchar(30), origin_city varchar(30), destination_city varchar(30), departure_time varchar(30), "
-					+ "arrival_time varchar(30), departure_date date, arrival_date date, capactiy int, seats_availavle int, "
+					+ "arrival_time varchar(30), departure_date date, arrival_date date, capactiy int, seats_available int, "
 					+ "seats_occupied int, isfull int, PRIMARY KEY(id))");
 				
 			create.executeUpdate();
@@ -42,7 +42,7 @@ public class DBMethod {
 			
 			PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS user(user_email varchar(40) NOT NULL PRIMARY KEY, "
 					+ "firstname varchar(30), lastname varchar(30), address varchar(30), zipcode int(5), username varchar(30), "
-					+ "password varchar(15), ssn varchar(9), security_question varchar(90), security_answer varchar(90))");
+					+ "password varchar(15), ssn varchar(9), security_question varchar(90), security_answer varchar(90),accounttype int(1))");
 			
 			
 		create.executeUpdate();
