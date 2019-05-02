@@ -175,7 +175,7 @@ public class Method {
 	}
 
 	// used to get flights from the database
-	public static ArrayList<Flights> SearchFlights() { 
+	public static ArrayList<Flights> SearchFlights(String cityA, String cityB) { 
 		
 		//make an ArrayList to store more then one flight
 		ArrayList<Flights> flights = new ArrayList<>();
@@ -184,11 +184,16 @@ public class Method {
 			// connect to the database
 			Connection conn = Method.getConnection();
 			
-			//unknown statement for unknown reasons (to be looked into)
-			Statement Stmt = conn.createStatement();
+			//create the statement that pulls the appropriate Flights information
+			String queryStr = "select * from flights where origin_city=? and destination_city=?";
+			PreparedStatement preparedQuery = conn.prepareStatement(queryStr);
 			
-			//select from the database
-			ResultSet result = Stmt.executeQuery("select * from flights");
+			// put in the values missing in the login statement above
+			preparedQuery.setString(1, cityA);
+			preparedQuery.setString(2, cityB);
+			
+			//pull the information from the database
+			ResultSet result = preparedQuery.executeQuery();
 			
 			//loop until there are no more flights that match the query
 			while(result.next()) {
@@ -213,6 +218,7 @@ public class Method {
 		catch (Exception e) {
 			System.out.println(e);
 		}
+		//return null if something goes wrong
 		return null;
 	}
 }

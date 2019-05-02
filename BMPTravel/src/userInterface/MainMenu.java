@@ -42,11 +42,11 @@ public class MainMenu extends Application{
 		
 		pane = new BorderPane();
 		pane.setTop(exitBT);
-		pane.setAlignment(exitBT, Pos.TOP_RIGHT);
-		pane.setMargin(exitBT, new Insets(4, 4, 4, 4));
+	//	pane.setAlignment(exitBT, Pos.TOP_RIGHT);
+	//	pane.setMargin(exitBT, new Insets(4, 4, 4, 4));
 		
 		vBox.setAlignment(Pos.CENTER);
-		vBox.setMargin(loginBT, new Insets(8, 8, 8, 8));
+	//	vBox.setMargin(loginBT, new Insets(8, 8, 8, 8));
 		
 		pane.setCenter(vBox);
 		
