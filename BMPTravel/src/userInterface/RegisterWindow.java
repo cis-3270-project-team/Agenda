@@ -71,7 +71,10 @@ public class RegisterWindow extends Application{
 		secAnswerTF = new TextField();
 		
 		secQuestionCB = new ChoiceBox<>();
-		secQuestionCB.getItems().addAll("Select a Question", "Option 1", "Option 2", "Option 3");
+		secQuestionCB.getItems().addAll("Select a Question", "What was the name of your first stuffed animal", 
+										"In what city or town did your mother and father meet", "Where were you when you had your first kiss",
+										"In what city or town was your first job");
+		
 		secQuestionCB.setValue("Select a Question");
 		
 		paneF = new FlowPane(8, 20);
