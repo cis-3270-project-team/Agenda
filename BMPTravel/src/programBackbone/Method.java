@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -21,8 +22,8 @@ public class Method {
 			Connection conn = getConnection();
 			
 			// make an insert statement for the customer's information
-			String insertUser = "INSERT INTO user(user_email, firstname, lastname, address, zipcode, username, "
-					+ "password, ssn, security_question, secutity_answer) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String insertUser = "INSERT INTO user(user_email, firstname, lastname, address, zipcode, state, username, "
+					+ "password, ssn, security_question, security_answer, accounttype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			try {//create the statement that inserts the Customer's information into the database
 				PreparedStatement preState = conn.prepareStatement(insertUser);
@@ -33,11 +34,13 @@ public class Method {
 				preState.setString(3, c1.getLastName());
 				preState.setString(4, c1.getAddress());
 				preState.setInt(5, c1.getZip());
-				preState.setString(6, c1.getUserName());
-				preState.setString(7, c1.getPassword());
-				preState.setInt(8, c1.getsSN());
-				preState.setString(9, c1.getSecurityQuestion());
-				preState.setString(10, c1.getSecurityAnswer());
+				preState.setString(6, c1.getState());
+				preState.setString(7, c1.getUserName());
+				preState.setString(8, c1.getPassword());
+				preState.setInt(9, c1.getsSN());
+				preState.setString(10, c1.getSecurityQuestion());
+				preState.setString(11, c1.getSecurityAnswer());
+				preState.setInt(12, c1.getAccountType());
 				
 				// send the info to the database
 				preState.executeUpdate();
@@ -112,27 +115,37 @@ public class Method {
 				//execute the statement and get the results
 				ResultSet results = preparedLogin.executeQuery();
 					
-				// keep only what is needed to create a User instance for the program to use
-				String email = results.getString("user_email");
-				String userName = results.getString("username");
-				String firstName = results.getString("firstname");
-				String lastName = results.getString("lastname");
-				int accountType = results.getInt("accounttype");
+				while (results.next()) {
+					// keep only what is needed to create a User instance for the program to use
+					String email = results.getString("user_email");
+					String userName = results.getString("username");
+					String firstName = results.getString("firstname");
+					String lastName = results.getString("lastname");
+					int accountType = results.getInt("accounttype");
 					
 				
-				// find out if the user is an admin or customer, then make an instance of the class
-				if (accountType == 1) {
-					Admin a1 = new Admin(firstName, lastName, userName, email);
+					// find out if the user is an admin or customer, then make an instance of the class
+					if (accountType == 1) {
+						Admin a1 = new Admin(firstName, lastName, userName, email);
+						
+						//close the database connection
+						conn.close();
 					
-					return a1;
-				}
+						return a1;
+					}
 				
-				else {
-					Customer c1 = new Customer(firstName, lastName, userName, email);
+					else {
+						Customer c1 = new Customer(firstName, lastName, userName, email);
+						
+						//close the database connection
+						conn.close();
 					
-					return c1;
+						return c1;
+					}
 				}
-			
+			}
+			catch (SQLException sqle) {
+				System.out.println(sqle);
 			}// a broad catch if anything goes wrong
 			catch (Exception e) {
 				System.out.println(e);
@@ -215,4 +228,35 @@ public class Method {
 		}
 		return null;
 	}
+/*
+	public static boolean isBooked(User u1, Flights f1) {
+		
+		int flightID = f1.getFlightNumber();
+		
+		String user = u1.getEmail();
+		
+		try {
+			
+		Connection conn = getConnection();
+		
+		String searchStr = "SELECT COUNT(1) FROM ticket WHERE user_email = ? AND flightid = ?";
+		
+		PreparedStatement preparedSearch = conn.prepareStatement(searchStr);
+		
+		preparedSearch.setString(1, user);
+		preparedSearch.setInt(2, flightID);
+		
+		ResultSet result = preparedSearch.executeQuery();
+		
+		int booked;
+		while(result.next()) {
+			
+			booked = 
+		}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}*/
 }

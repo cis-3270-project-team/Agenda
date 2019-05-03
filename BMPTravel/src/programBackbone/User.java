@@ -96,6 +96,10 @@ public abstract class User {
 		return this.password;
 	}
 	
+	public int getAccountType() {
+		return this.accountType;
+	}
+	
 	public abstract void bookFlight();// use to register a user (and friends) on a flight
 		// details unknown
 	

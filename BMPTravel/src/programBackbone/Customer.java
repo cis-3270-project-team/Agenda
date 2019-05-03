@@ -19,7 +19,7 @@ public class Customer extends User {
 		
 	}
 	
-	Customer(String firstN, String lastN, String userN, String pass, String email, String securityQ, String securityA, String address, String state, int zip, int sSN){
+	public Customer(String firstN, String lastN, String userN, String pass, String email, String securityQ, String securityA, String address, String state, int zip, int sSN){
 		super(firstN, lastN, userN, pass, email, securityQ, securityA);
 		this.address = address;
 		this.state = state;
@@ -28,7 +28,7 @@ public class Customer extends User {
 	}
 	
 	public Customer(String firstName, String lastName, String userName, String email) {
-		// TODO Auto-generated constructor stub
+		super(firstName, lastName, userName, email);
 	}
 
 	public String getAddress() {
@@ -61,6 +61,10 @@ public class Customer extends User {
 
 	public void setsSN(int sSN) {
 		this.sSN = sSN;
+	}
+	
+	public int getAccountType() {
+		return accountType;
 	}
 	
 	@Override

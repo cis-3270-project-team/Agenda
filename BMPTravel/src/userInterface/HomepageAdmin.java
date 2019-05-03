@@ -9,12 +9,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import programBackbone.Admin;
+import programBackbone.User;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class HomepageAdmin extends Application {
+public class HomepageAdmin extends MainMenu {
 
 	Label helloLB; 
 
@@ -26,15 +28,9 @@ public class HomepageAdmin extends Application {
 
 	VBox vBox; 
 
- 
-	public static void main(String[] args) throws Exception {
-
-		launch(args); 
-
-	}
-
-	@Override
-	public void start(Stage primaryStage)  {
+	Admin a1;
+	
+	public void start(Stage primaryStage, Admin a1)  {
 
 		window = primaryStage; 
 		window.setTitle("Home Page");
@@ -43,7 +39,7 @@ public class HomepageAdmin extends Application {
 		accountHistoryBT = new Button("Account History List");
 		logoutBT = new Button("Logout");
 		updateFlightsInfoBT = new Button("Update Flights Info");
-		helloLB = new Label ("Hello, and welcome back!"); 
+		helloLB = new Label ("Hello, and welcome back " + a1.getFirstName() + "!"); 
 		
 		GridPane grid = new GridPane(); 
 		grid.setPadding(new Insets(10, 10, 10, 10));
@@ -77,4 +73,5 @@ public class HomepageAdmin extends Application {
 		window.show();
 
 	}
+
 }

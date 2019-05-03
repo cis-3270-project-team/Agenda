@@ -8,6 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import programBackbone.Admin;
+import programBackbone.Method;
+import programBackbone.User;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -16,32 +19,25 @@ public class MainMenu extends Application{
 	private static final int CENTER = 0;
 
 	// creating the labels 
-	Label UserNameLB, PasswordLB;  
+	Label userNameLB, passwordLB;  
 
-
-	TextField UserNameTF, PasswordTF; 
-
+	TextField userNameTF, passwordTF; 
 
 	Button loginBT, registerBT, exitBT, forgotPassBT;
 
-
 	Stage window;
-
 
 	Scene scene;
 
-
 	VBox vBox;
-
 
 	BorderPane pane;
 
-
+	User u1;
 
 	public static void main(String[] args) {
 
 		launch(args);
-
 
 	}
 
@@ -56,29 +52,28 @@ public class MainMenu extends Application{
 		registerBT = new Button("Register");
 		forgotPassBT = new Button("Forgot Password");
 
-		// registerBT.setOnAction(e -> RegisetWindow.d);
 		exitBT = new Button("Exit");
 		exitBT.setOnAction(event -> closeProgram()); 
-		UserNameLB = new Label("Username:");
-		PasswordLB = new Label("Password:");
-		UserNameTF = new TextField();
-		PasswordTF = new TextField();
+		userNameLB = new Label("Username:");
+		userNameTF = new TextField();
+		passwordLB = new Label("Password:");
+		passwordTF = new TextField();
 
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(10, 10, 10, 10));
 		grid.setVgap(8); 
 		grid.setHgap(10);
 
-		GridPane.setConstraints(UserNameLB, 0, 0); 
-		GridPane.setConstraints(UserNameTF, 0, 1);
-		GridPane.setConstraints(PasswordLB, 0, 2);
-		GridPane.setConstraints(PasswordTF, 0, 3);
+		GridPane.setConstraints(userNameLB, 0, 0); 
+		GridPane.setConstraints(userNameTF, 0, 1);
+		GridPane.setConstraints(passwordLB, 0, 2);
+		GridPane.setConstraints(passwordTF, 0, 3);
 		GridPane.setConstraints(loginBT, 0, 4);
 		GridPane.setConstraints(registerBT, 0, 5);
 		GridPane.setConstraints(exitBT, 42, 0);
 		GridPane.setConstraints(forgotPassBT, 0, 7);
 		
-		grid.getChildren().addAll(UserNameLB, UserNameTF, PasswordLB, PasswordTF, loginBT, registerBT, exitBT, forgotPassBT); 
+		grid.getChildren().addAll(userNameLB, userNameTF, passwordLB, passwordTF, loginBT, registerBT, exitBT, forgotPassBT); 
 
 		scene = new Scene(grid, 650, 280);
 		window.setScene(scene);
@@ -97,21 +92,43 @@ public class MainMenu extends Application{
 		}); 
 		loginBT.setOnAction(event1 -> {
 
-			HomePage homepage = new HomePage(); 
+			u1 = Method.login(userNameTF.getText(), passwordTF.getText());
 			
 			try {
-				homepage.start(primaryStage);
-			}
-			catch (Exception e) {
+				if (u1 instanceof Admin) {
+				
+					Admin a1 = (Admin) u1;
+				
+					HomepageAdmin homepageAdmin = new HomepageAdmin();
+				
+					homepageAdmin.start(primaryStage, a1);
+				
+				}
+				else {
+					HomePage homepage = new HomePage(); 
+			
+					homepage.start(primaryStage, u1);
+				}
+				
+			}catch (NullPointerException npe) {
+				npe.printStackTrace();
+				
+				System.out.println("Caught");
+				
+				LoginAlertBox.display();
+			
+			}catch (Exception e) {
 				e.printStackTrace();
 			}
-		});
+			});
+		
+		forgotPassBT.setOnAction(e -> System.out.println("Coming Soon!"));
 		
 		window.show();
 	}
 
 	public void closeProgram() { 
-		System.out.print("Action saved!");
+		System.out.print("Good Bye :(");
 		window.close(); 
 
 	}
