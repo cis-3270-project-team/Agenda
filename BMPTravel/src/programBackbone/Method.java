@@ -7,9 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+import javafx.scene.control.CheckBox;
 import userInterface.AlertBox;
 
 public class Method {
@@ -234,10 +236,19 @@ public class Method {
 				Date arrivalDate = result.getDate("arrival_date");
 				String departure_time = result.getString("departure_time");
 				String arrival_time = result.getString("arrival_time");
+				int isFilled = result.getInt("isfull");
 				
+				boolean isFull;
+				
+				if (isFilled > 0) {
+					isFull = true;
+				}
+				else {
+					isFull = false;
+				}
 				//make a flight instance with the information
 				Flights f1 = new Flights(airline, origin_city, destination_city, flightCapacity, seats_available, flightNumber,
-							departure_date, arrivalDate, departure_time, arrival_time);
+							departure_date, arrivalDate, departure_time, arrival_time, isFull);
 			
 				// add the new flight to the flight ArrayList
 				flights.add(f1);
@@ -255,6 +266,7 @@ public class Method {
 
 	// used to make sure the flight is not already booked by the user
 	public static boolean isBooked(User u1, Flights f1) {
+		
 		
 		int flightID = f1.getFlightNumber();
 		
@@ -375,15 +387,16 @@ public class Method {
 			
 			ResultSet result = preparedSearch.executeQuery();
 			
-			String exists = null;
+		//	String exists = null;
 			while(result.next()) {
 				
-				exists  = result.getString("user_email");				
-			}
-			
-			if (exists != null) {
+		//		exists  = result.getString("user_email");		
 				return true;
 			}
+			
+		//	if (exists != null) {
+		//		return true;
+		//	}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -421,6 +434,200 @@ public class Method {
 			e.printStackTrace();
 		}
 		
+		return false;
+	}
+
+	public static boolean bookFlight(User u1, ObservableList<Flights> flights) {
+		
+		Flights f1 = (Flights) flights;
+		
+		isBooked(u1, f1);
+		
+		int seats = checkSeats(f1);
+		
+		if(seats > 0) {
+			seats -= 1;
+			if(book(u1, f1, seats)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean book(User u1, Flights f1, int seats) {
+
+		Connection conn = getConnection();
+		
+		String bookStr = "INSERT INTO ticket(User_email, numberflight) VALUES (?, ?)";
+		
+		String markFlightsStr = "UPDATE flights SET seats_available = ? WHERE numberflight = ?";
+		
+	
+		
+		try {
+			
+			PreparedStatement preBook = conn.prepareStatement(bookStr);
+			PreparedStatement preMarkFlights = conn.prepareStatement(markFlightsStr);
+			
+			preBook.setString(1, u1.getEmail());
+			preBook.setInt(2, f1.getFlightNumber());
+			
+			preMarkFlights.setInt(1, seats);
+			preMarkFlights.setInt(1, f1.getFlightNumber());
+			
+			preBook.executeUpdate();
+			preMarkFlights.executeUpdate();
+			
+			conn.close();
+			
+			return true;
+			
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private static int checkSeats(Flights f1) {
+
+		Connection conn = getConnection();
+		
+		String seatsStr = "SELECT seats_available FROM flights WHERE numberflight = ?";
+		
+		try {
+			PreparedStatement preSeats = conn.prepareStatement(seatsStr);
+		
+			preSeats.setInt(1, f1.getFlightNumber());
+			
+			ResultSet set = preSeats.executeQuery();
+			
+			while(set.next()) {
+				
+				int seats_available = Integer.parseInt(set.getString("seats_available"));
+				
+				return seats_available;
+			}
+			
+		}
+		catch(NullPointerException npe) {
+			AlertBox.display("Problem", "The Flight You Are Trying To Book Does Not Seem To Exist");
+			npe.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	
+	public static Flights makeFlight(String airline, String originCity, String destinationCity, String flightCapacityStr, 
+			String flightNumberStr, String departureDateStr, String arrivalDateStr, String departureTime, String arrivalTime, 
+			String seatsAvailableStr, CheckBox isFilledBox) {
+		
+		int flightCapacity = 0, seatsAvailable = 0, flightNumber = 0;
+		
+		boolean isFilled;
+		
+		Date departureDate = null, arrivalDate = null;
+		
+		if (isInt(flightCapacityStr)){
+			flightCapacity = Integer.parseInt(flightCapacityStr);
+		}
+		
+		if (isInt(seatsAvailableStr)) {
+			seatsAvailable = Integer.parseInt(seatsAvailableStr);
+		}
+		
+		if (isInt(flightNumberStr)) {
+			flightNumber = Integer.parseInt(flightNumberStr);
+		}
+		
+		if (isFilledBox.isSelected()) {
+			isFilled = true;
+		}
+		else {
+			isFilled = false;
+		}
+		
+		try {
+		departureDate = (Date) new SimpleDateFormat("dd/MM/yyyy").parse(departureDateStr);
+		
+		arrivalDate = (Date) new SimpleDateFormat("dd/MM/yyyy").parse(arrivalDateStr);
+		}
+		catch (Exception dateE) {
+			AlertBox.display("Problem", "You may have formated the dates incorrectly\nInput = \" " + arrivalDateStr + "\" and \"" + 
+					departureDateStr + "\"\n \t It should be in a dd/mm/yyyy format");
+		}
+		
+		Flights f1 = new Flights(airline, originCity, destinationCity, flightCapacity, seatsAvailable, flightNumber, 
+				departureDate, arrivalDate, departureTime, arrivalTime, isFilled);
+	
+		return f1;
+	}
+
+	public static boolean addFlight(Flights f1) {
+		
+		Connection conn = getConnection();
+		
+		String addFlightStr = "INSERT INTO flights(numberflight, airline, origin_city, destination_city, departure_time,"
+				+ " arrival_time, departure_date, arrival_date, capactiy, seats_available, seats_occupied, isfull) VALUSE"
+				+ " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		
+		try {
+			PreparedStatement preAddFlight = conn.prepareStatement(addFlightStr);
+			
+			preAddFlight.setInt(1, f1.getFlightNumber());
+			preAddFlight.setString(2, f1.getAirline());
+			preAddFlight.setString(3, f1.getOriginCity());
+			preAddFlight.setString(4, f1.getDestinationCity());
+			preAddFlight.setString(5, f1.getDepartureTime());
+			preAddFlight.setString(6, f1.getArrivalTime());
+			preAddFlight.setDate(7, (Date) f1.getDepartureDate());
+			preAddFlight.setDate(8, (Date) f1.getArrivalDate());
+			preAddFlight.setInt(9, f1.getFlightCapacity());
+			preAddFlight.setInt(10, f1.getSeatsAvailable());
+			preAddFlight.setInt(11,f1.getFlightCapacity() - f1.getSeatsAvailable());
+			preAddFlight.setBoolean(12, f1.getIsFilled());
+			
+			preAddFlight.executeUpdate();
+			
+			conn.close();
+			
+			return true;
+			
+		}
+		catch (Exception e) {
+			AlertBox.display("Problem", "There was a problem putting the new flight into the database");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
+	public static boolean removeFlight(ObservableList<Flights> flight) {
+		
+		Flights f1 = (Flights) flight;
+		
+		Connection conn = getConnection();
+		
+		String removeFlightStr = "REMOVE FROM flights WHERE numberflight = ?";
+		
+		try {
+			PreparedStatement removeFlight = conn.prepareStatement(removeFlightStr);
+			
+			removeFlight.setInt(1, f1.getFlightNumber());
+			
+			removeFlight.executeUpdate();
+			
+			conn.close();
+			
+			return true;
+		}
+		catch (Exception e) {
+			AlertBox.display("Problem", "There was a problem removing the flight from the database");
+			e.printStackTrace();
+		}
 		return false;
 	}
 }

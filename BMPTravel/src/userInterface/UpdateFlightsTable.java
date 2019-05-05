@@ -4,11 +4,14 @@ import programBackbone.Method;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import programBackbone.Admin;
@@ -18,17 +21,21 @@ public class UpdateFlightsTable extends MainMenu {
 
 	Stage window; 
 	
-	Button AddBT, DeleteBT, UpdateBT; 
+	Button addBT, deleteBT, updateBT, backBT; 
+	
+	Region emptySpace;
 
 	TextField airlineTF, originCityTF, destinationCityTF, flightCapacityTF,
 	flightNumberTF, departureDateTF, arrivalDateTF, departureTimeTF, 
-	arrivalTimeTF, seatsAvailableTF, isFilledTF;
+	arrivalTimeTF, seatsAvailableTF;
+	
+	CheckBox isFilledCB;
 
 	TableView<Flights> table; 
 
 	VBox vBox; 
 
-	HBox hBox; 
+	HBox hBox, hBox2, hBox3; 
 
 	Scene scene; 
 	public void start(Stage primaryStage, Admin a1) {
@@ -36,9 +43,10 @@ public class UpdateFlightsTable extends MainMenu {
 		window = primaryStage; 
 		window.setTitle("UpdateFlightsTable");
 
-		AddBT = new Button("Add Flight"); 
-		DeleteBT = new Button("Delete Flight"); 
-		UpdateBT = new Button("Update Flight"); 
+		addBT = new Button("Add Flight"); 
+		deleteBT = new Button("Delete Flight"); 
+		updateBT = new Button("Update Flight"); 
+		backBT = new Button("Back");
 
 		airlineTF = new TextField(); 
 		airlineTF.setPromptText("airline");
@@ -70,8 +78,7 @@ public class UpdateFlightsTable extends MainMenu {
 		seatsAvailableTF = new TextField();
 		seatsAvailableTF.setPromptText("seatsAvailable");
 
-		isFilledTF = new TextField();
-		isFilledTF.setPromptText("isFilled");
+		isFilledCB = new CheckBox("isFull");
 		
 		//airline column
 		TableColumn<Flights, String> airlineColumn = new TableColumn("Airline"); 
@@ -124,16 +131,68 @@ public class UpdateFlightsTable extends MainMenu {
 		table.getColumns().addAll(airlineColumn,originCityColumn, destinationCityColumn, 
 		flightCapacityColumn, flightNumberColumn, departureDateColumn, arrivalDateColumn, 
 		departureTimeColumn, arrivalTimeColumn, seatsAvailableColumn, isFilledColumn); 
+		
+		emptySpace = new Region();
 
-		HBox hBox2 = new HBox(); 
-		hBox2.getChildren().addAll(airlineTF, originCityTF, destinationCityTF, flightCapacityTF, flightNumberTF, 
-		departureDateTF, arrivalDateTF, departureTimeTF, arrivalTimeTF, seatsAvailableTF, isFilledTF); 
+		hBox2 = new HBox(); 
+		hBox2.getChildren().addAll(airlineTF, originCityTF, destinationCityTF, flightCapacityTF, flightNumberTF); 
+		
+		hBox3 = new HBox();
+		hBox3.getChildren().addAll(departureDateTF, arrivalDateTF, departureTimeTF, arrivalTimeTF, seatsAvailableTF, isFilledCB);
 
-		HBox hBox = new HBox(); 
-		hBox.getChildren().addAll(AddBT, DeleteBT, UpdateBT);
+		hBox = new HBox(); 
+		hBox.setHgrow(emptySpace, Priority.ALWAYS);
+		hBox.getChildren().addAll(addBT, deleteBT, updateBT, emptySpace, backBT);
 
-		VBox vBox = new VBox();
-		vBox.getChildren().addAll(table,hBox2, hBox); 
+		vBox = new VBox();
+		vBox.getChildren().addAll(table,hBox2, hBox3, hBox); 
+		
+		backBT.setOnAction(e ->{
+			HomepageAdmin homepage = new HomepageAdmin();
+			
+			try {
+				homepage.start(window, a1);
+			}
+			catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		});
+		
+		addBT.setOnAction(e -> {
+			Flights f1 = Method.makeFlight(airlineTF.getText(), originCityTF.getText(), destinationCityTF.getText(), 
+				flightCapacityTF.getText(), flightNumberTF.getText(), departureDateTF.getText(), arrivalDateTF.getText(),
+				departureTimeTF.getText(), arrivalTimeTF.getText(), seatsAvailableTF.getText(), isFilledCB);
+			
+			if (Method.addFlight(f1)) {
+				
+				table.getItems().add(f1);
+				
+				airlineTF.clear();
+				originCityTF.clear();
+				destinationCityTF.clear();
+				flightCapacityTF.clear();
+				flightNumberTF.clear();
+				departureDateTF.clear();
+				arrivalDateTF.clear();
+				departureTimeTF.clear();
+				arrivalTimeTF.clear();
+				seatsAvailableTF.clear();
+				isFilledCB.setSelected(false);
+			}
+		});
+		
+		deleteBT.setOnAction(e ->{
+			ObservableList<Flights> flight, allFlights;
+			
+			allFlights = table.getItems();
+			
+			flight = table.getSelectionModel().getSelectedItems();
+			
+			if (Method.removeFlight(flight)) {
+				flight.forEach(allFlights::remove);
+			}
+			
+		});
 
 		Scene scene = new Scene(vBox); 
 		window.setScene(scene); 

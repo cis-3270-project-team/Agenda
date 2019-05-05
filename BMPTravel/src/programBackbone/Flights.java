@@ -26,18 +26,19 @@ public class Flights {
     }
 
     public Flights(String airline, String originCity, String destinationCity, int flightCapacity, int seats_available, int flightNumber, 
-    		Date departureDate, Date arrivalDate, String departureTime, String arrivalTime) 
+    		Date departureDate, Date arrivalDate, String departureTime, String arrivalTime, boolean isFilled) 
     {
     	this.airline = airline;
     	this.originCity = originCity;
         this.destinationCity = destinationCity;
         this.flightCapacity = flightCapacity;
-        this.setSeatsAvailable(seats_available);
+        this.seatsAvailable = seats_available;
         this.flightNumber = flightNumber;
         this.departureDate = departureDate;
         this.arrivalTime = arrivalTime;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
+        this.isFilled = isFilled;
         
     }
 

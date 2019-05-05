@@ -16,13 +16,14 @@ import programBackbone.Flights;
 import programBackbone.Method;
 import programBackbone.User;
 
-public class SearchOutbound extends MainMenu{
-	
+public class SearchReturnFlights extends MainMenu {
+
+
 	Stage window;
 	
 	Scene scene5;
 	
-	TableView<Flights> outbound;
+	TableView<Flights> returnFlights;
 	
 	VBox vBox;
 	
@@ -35,7 +36,7 @@ public class SearchOutbound extends MainMenu{
 		
 		window = primaryStage;
 		
-		window.setTitle("Search Outbound Flights");
+		window.setTitle("Search Return Flights");
 		
 		TableColumn<Flights, String> airline = new TableColumn<>("Airline");		
 		airline.setMinWidth(75);
@@ -64,60 +65,34 @@ public class SearchOutbound extends MainMenu{
 		TableColumn<Flights, Integer> seats = new TableColumn<>("Seats Abailable");		
 		seats.setMinWidth(30);
 		seats.setCellValueFactory(new PropertyValueFactory<>("seatsAvailable"));
-		
-		outbound = new TableView<>();
+	
+returnFlights = new TableView<>();
 		
 		ObservableList<Flights> flights = Method.searchFlights();
 		
-		outbound.setItems(flights);
+		returnFlights.setItems(flights);
 		
-		outbound.getColumns().addAll(airline, origin, destination, departureTime, arrivalTime, date, seats);
+		returnFlights.getColumns().addAll(airline, origin, destination, departureTime, arrivalTime, date, seats);
 		
 		backBT = new Button("back");
 		
 		backBT.setOnAction(e -> {
-			if (u1 instanceof Admin) {
-				
-				Admin a1 = (Admin) u1;
+			SearchOutbound searchFlights = new SearchOutbound();
 			
-				HomepageAdmin homepage1 = new HomepageAdmin();
-				try {
-					homepage1.start(window, a1);
-				}
-				catch(Exception exc) {
-					System.out.println(exc);
-					exc.printStackTrace();
-				}
-			}
-			else {
-				Customer c1 = (Customer) u1;
+			try {
 				
-				HomePage homepage2 = new HomePage();
-				try {
-					homepage2.start(window, c1);
-				}
-				catch(Exception exc2) {
-					System.out.println(exc2);
-					exc2.printStackTrace();
-				}
+				searchFlights.start(window, u1);
+				
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 		
 		bookFlightBT = new Button("Book Flight");
 		
 		bookFlightBT.setOnAction(e -> {
-			if(Method.bookFlight(u1, outbound.getSelectionModel().getSelectedItems())) {
-				
-				SearchReturnFlights searchReturn = new SearchReturnFlights();
-				
-				try {
-					searchReturn.start(window, u1);
-				}
-				catch (Exception e2) {
-					AlertBox.display("We Are Sorry", "Something Went Wrong With Booking");
-					e2.printStackTrace();
-				}
-			}
+			Method.bookFlight(u1, returnFlights.getSelectionModel().getSelectedItems());
 		});
 		
 		
@@ -128,12 +103,11 @@ public class SearchOutbound extends MainMenu{
 		
 		vBox = new VBox();
 		
-		vBox.getChildren().addAll(outbound, bottom);
+		vBox.getChildren().addAll(returnFlights, bottom);
 		vBox.setPadding(new Insets(20.0, 20.0, 20.0, 20.0));
 		
 		scene5 = new Scene(vBox);
 		window.setScene(scene5);
 		window.show();
 	}
-
 }

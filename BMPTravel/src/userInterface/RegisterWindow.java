@@ -87,6 +87,16 @@ public class RegisterWindow extends Application{
 		HBox.setHgrow(emptySpace, Priority.ALWAYS);
 		paneH.getChildren().addAll(mainMenuBT, emptySpace, registerBT);
 		
+		mainMenuBT.setOnAction(e -> {
+			MainMenu main = new MainMenu();
+			try {
+				main.start(window);
+			}
+			catch(Exception e2) {
+				e2.printStackTrace();
+			}
+		});
+		
 		registerBT.setOnAction(e -> {
 			
 			if (Method.checkRegistry(firstNameTF.getText(), lastNameTF.getText(), userNameTF.getText(), passwordTF.getText(), 
