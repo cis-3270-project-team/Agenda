@@ -9,43 +9,36 @@ public class Flights {
 	public static void main(String[]args){
 		
 	}
-    private String airline;
-    private String originCity;
-    private String destinationCity;
-    private int flightCapacity;
-    private int flightNumber;
-    private Date departureDate;
-    private Date arrivalDate;
-    private String departureTime;
-    private String arrivalTime;
-    private Boolean isFilled;
+    private String airline;			
+    private String originCity;		
+    private String destinationCity;	
+    private int flightCapacity;		
+    private int flightNumber;		
+    private Date departureDate;		
+    private Date arrivalDate;		
+    private String departureTime;	
+    private String arrivalTime;		
+    private int seatsAvailable;		
+    private Boolean isFilled;		
 
     public Flights() {
 
     }
 
-	public Flights(String origin_city, String destination_city, java.sql.Date departure_date, String departure_time,
-			int seats_available) {
-		this.originCity = origin_city;
-		this.destinationCity = destination_city;
-		this.departureDate = departure_date;
-		this.departureTime = departure_time;
-//	commented out the seats available because they might be placed somewhere else
-//		this.seatsAvailable = seats_available;
-	}
-
-    public Flights(String airline, String originCity, String destinationCity, int flightCapacity,int flightNumber, 
+    public Flights(String airline, String originCity, String destinationCity, int flightCapacity, int seats_available, int flightNumber, 
     		Date departureDate, Date arrivalDate, String departureTime, String arrivalTime) 
     {
     	this.airline = airline;
     	this.originCity = originCity;
         this.destinationCity = destinationCity;
         this.flightCapacity = flightCapacity;
+        this.setSeatsAvailable(seats_available);
         this.flightNumber = flightNumber;
         this.departureDate = departureDate;
         this.arrivalTime = arrivalTime;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
+        
     }
 
 	public String getAirline() {
@@ -126,6 +119,14 @@ public class Flights {
 
 	public void setIsFilled(Boolean isFilled) {
 		this.isFilled = isFilled;
+	}
+
+	public int getSeatsAvailable() {
+		return seatsAvailable;
+	}
+
+	public void setSeatsAvailable(int seatsAvailable) {
+		this.seatsAvailable = seatsAvailable;
 	}
 
 	@Override

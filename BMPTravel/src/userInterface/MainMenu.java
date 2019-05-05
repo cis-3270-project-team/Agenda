@@ -15,7 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-public class MainMenu extends Application{
+public class MainMenu extends Application{ 
 	private static final int CENTER = 0;
 
 	// creating the labels 
@@ -115,14 +115,23 @@ public class MainMenu extends Application{
 				
 				System.out.println("Caught");
 				
-				LoginAlertBox.display();
+				AlertBox.display("Invalid UserName or Password", "The User Name and/or Password is Incorrect");
 			
 			}catch (Exception e) {
 				e.printStackTrace();
 			}
 			});
 		
-		forgotPassBT.setOnAction(e -> System.out.println("Coming Soon!"));
+		forgotPassBT.setOnAction(e -> {
+			try {
+				ForgotPasswordPage forgotPage = new ForgotPasswordPage();
+				
+				forgotPage.start(primaryStage);
+				
+			}catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		});
 		
 		window.show();
 	}

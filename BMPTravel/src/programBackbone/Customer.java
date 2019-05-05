@@ -89,7 +89,7 @@ public class Customer extends User {
 	@Override
 	public ArrayList<Flights> getFlight() { 
 		
-		ArrayList<Flights> f1 = new ArrayList<>(Method.SearchFlights());
+		ArrayList<Flights> f1 = new ArrayList<>(Method.searchFlights());
 		
 		if (f1.isEmpty()) {
 			return null;

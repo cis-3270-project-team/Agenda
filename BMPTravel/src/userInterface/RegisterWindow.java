@@ -89,21 +89,28 @@ public class RegisterWindow extends Application{
 		
 		registerBT.setOnAction(e -> {
 			
-			c1 = new Customer(firstNameTF.getText(), lastNameTF.getText(), userNameTF.getText(), passwordTF.getText(), emailTF.getText(),
-					secQuestionCB.getValue(), secAnswerTF.getText(), addressTF.getText(), stateTF.getText(), Integer.parseInt(zipTF.getText()), 
-					Integer.parseInt(ssnTF.getText()));
+			if (Method.checkRegistry(firstNameTF.getText(), lastNameTF.getText(), userNameTF.getText(), passwordTF.getText(), 
+					emailTF.getText(), secQuestionCB.getValue(), secAnswerTF.getText(), addressTF.getText(), stateTF.getText(), 
+					zipTF.getText(), ssnTF.getText())) {
+				
+
+					c1 = new Customer(firstNameTF.getText(), lastNameTF.getText(), userNameTF.getText(), passwordTF.getText(), 
+							emailTF.getText(), secQuestionCB.getValue(), secAnswerTF.getText(), addressTF.getText(), stateTF.getText(), 
+							Integer.parseInt(zipTF.getText()), Integer.parseInt(ssnTF.getText()));
+					
+					Method.registerUser(c1);
 			
-			Method.registerUser(c1);
+					HomePage homepage = new HomePage(); 
 			
-			HomePage homepage = new HomePage(); 
-			
-			try {
-				homepage.start(primaryStage, c1);
-			}
-			catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		});
+					try {
+						homepage.start(primaryStage, c1);
+					}
+					catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				
+				}
+				});
 		
 		paneB = new BorderPane();
 		paneB.setCenter(paneF);

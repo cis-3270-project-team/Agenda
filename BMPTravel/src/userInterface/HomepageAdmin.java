@@ -66,7 +66,36 @@ public class HomepageAdmin extends MainMenu {
 				e.printStackTrace();
 			}
 		});
+		
 
+		updateFlightsInfoBT.setOnAction(e -> {
+		
+			UpdateFlightsTable updateTable = new UpdateFlightsTable();
+
+			try {
+			
+				updateTable.start(primaryStage, a1);
+				
+			}
+			catch(Exception ufte) {
+				System.out.println(ufte);
+				ufte.printStackTrace();
+			}
+			
+		});
+		
+		/*	searchFlightBT.setOnAction(e -> {
+		
+		SearchOutbound searchOutbound = new SearchOutbound();
+		
+		try {
+			searchOutbound.start(primaryStage, a1);
+		}
+		catch (Exception e2) {
+			System.out.println(e2);
+			e2.printStackTrace();
+		}
+		});		*/
 
 		scene = new Scene(grid, 600, 300);
 		window.setScene(scene);

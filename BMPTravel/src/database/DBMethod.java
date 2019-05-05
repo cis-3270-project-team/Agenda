@@ -14,7 +14,7 @@ public class DBMethod {
 		try {
 			Connection conn = Method.getConnection();
 			
-			PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS flight(numberflight int(6) "
+			PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS flights(numberflight int(6) "
 					+ "NOT NULL, airline varchar(30), origin_city varchar(30), destination_city varchar(30), "
 					+ "departure_time varchar(30), arrival_time varchar(30), departure_date date, arrival_date date, capactiy int, "
 					+ "seats_available int, seats_occupied int, isfull int, PRIMARY KEY(numberflight))");
@@ -308,24 +308,23 @@ public class DBMethod {
 			Connection conn = Method.getConnection();
 			
 			//prepare a statement for the data
-			PreparedStatement fill = conn.prepareStatement("INSERT INTO flight(id, numberflight, airline, origin_city, destination_city,"
+			PreparedStatement fill = conn.prepareStatement("INSERT INTO flights(numberflight, airline, origin_city, destination_city,"
 					+ " departure_time, arrival_time, departure_date, arrival_date, capactiy, seats_available, seats_occupied, isfull)"
-					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			
 			//fill in the values for the data
-			fill.setInt(1, 0001);
-			fill.setInt(2, 001);
-			fill.setString(3, "Delta");
-			fill.setString(4, "Atlanta");
-			fill.setString(5, "New York");
-			fill.setString(6, "7:00 am");
-			fill.setString(7, "9:17 am");
+			fill.setInt(1, 001);
+			fill.setString(2, "Delta");
+			fill.setString(3, "Atlanta");
+			fill.setString(4, "New York");
+			fill.setString(5, "7:00 am");
+			fill.setString(6, "9:17 am");
+			fill.setDate(7, Date.valueOf("2019-5-26"));
 			fill.setDate(8, Date.valueOf("2019-5-26"));
-			fill.setDate(9, Date.valueOf("2019-5-26"));
+			fill.setInt(9, 15);
 			fill.setInt(10, 15);
-			fill.setInt(11, 15);
-			fill.setInt(12, 0);
-			fill.setBoolean(13, false);
+			fill.setInt(11, 0);
+			fill.setBoolean(12, false);
 	
 			//send the information to the database
 			fill.executeUpdate();

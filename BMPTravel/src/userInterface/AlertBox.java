@@ -8,19 +8,19 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class LoginAlertBox {
+public class AlertBox {
 
-	public static void display() {
+	public static void display(String title, String message) {
 		
 		Stage window = new Stage();
 		
 		window.initModality(Modality.APPLICATION_MODAL);
 		
-		window.setTitle("Invalid Username or Password");
+		window.setTitle(title);
 		
 		window.setMinWidth(350);
 		
-		Label l = new Label("The user name and/or password are incorect.");
+		Label l = new Label(message);
 		
 		Button b = new Button("Try Again");
 		b.setOnAction(e -> window.close());

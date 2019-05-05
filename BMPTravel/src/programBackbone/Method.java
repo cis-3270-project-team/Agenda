@@ -7,9 +7,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import userInterface.AlertBox;
 
 public class Method {
+	
+	//used to check if the String contains only numbers
+	public static boolean isInt(String number) {
+		
+		int length = number.length();
+		
+		for (int t = 0; t > length; t++) {
+			if(number.charAt(t) > 9 || number.charAt(t) < 0) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 	
 	//used to register a new User (Customer only right now)
 	public static void registerUser(User u1) {
@@ -188,10 +205,10 @@ public class Method {
 	}
 
 	// used to get flights from the database
-	public static ArrayList<Flights> SearchFlights() { 
+	public static ObservableList<Flights> searchFlights() { 
 		
-		//make an ArrayList to store more then one flight
-		ArrayList<Flights> flights = new ArrayList<>();
+		//make an ObservableList to store more then one flight
+		ObservableList<Flights> flights = FXCollections.observableArrayList();
 		
 		try {
 			// connect to the database
@@ -207,14 +224,20 @@ public class Method {
 			while(result.next()) {
 				
 				//get the information on a single flight
+				String airline = result.getString("airline");
 				String origin_city = result.getString("origin_city");
 				String destination_city = result.getString("destination_city");
-				String departure_time = result.getString("departure_time");
+				int flightCapacity = result.getInt("capactiy");
+				int seats_available = result.getInt("seats_available");
+				int flightNumber = result.getInt("numberflight");
 				Date departure_date = result.getDate("departure_date");
-				int seats_available = result.getInt("seats_abailable");
+				Date arrivalDate = result.getDate("arrival_date");
+				String departure_time = result.getString("departure_time");
+				String arrival_time = result.getString("arrival_time");
 				
 				//make a flight instance with the information
-				Flights f1 = new Flights(origin_city, destination_city, departure_date, departure_time, seats_available);
+				Flights f1 = new Flights(airline, origin_city, destination_city, flightCapacity, seats_available, flightNumber,
+							departure_date, arrivalDate, departure_time, arrival_time);
 			
 				// add the new flight to the flight ArrayList
 				flights.add(f1);
@@ -225,10 +248,12 @@ public class Method {
 		}//a broad catch if anything else goes wrong
 		catch (Exception e) {
 			System.out.println(e);
+			e.printStackTrace();
 		}
 		return null;
 	}
-/*
+
+	// used to make sure the flight is not already booked by the user
 	public static boolean isBooked(User u1, Flights f1) {
 		
 		int flightID = f1.getFlightNumber();
@@ -237,26 +262,165 @@ public class Method {
 		
 		try {
 			
-		Connection conn = getConnection();
+			Connection conn = getConnection();
 		
-		String searchStr = "SELECT COUNT(1) FROM ticket WHERE user_email = ? AND flightid = ?";
+			String searchStr = "SELECT user_name FROM ticket WHERE user_email = ? AND flightid = ?";
 		
-		PreparedStatement preparedSearch = conn.prepareStatement(searchStr);
+			PreparedStatement preparedSearch = conn.prepareStatement(searchStr);
 		
-		preparedSearch.setString(1, user);
-		preparedSearch.setInt(2, flightID);
+			preparedSearch.setString(1, user);
+			preparedSearch.setInt(2, flightID);
 		
-		ResultSet result = preparedSearch.executeQuery();
+			ResultSet result = preparedSearch.executeQuery();
 		
-		int booked;
-		while(result.next()) {
+			String exists = null;
+			while(result.isBeforeFirst()) {
+				
+				exists = result.getString("user_name");
+			}
 			
-			booked = 
-		}
+			if (exists != null) {
+				return true;
+			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 		return false;
-	}*/
+	}
+	
+	// used to make sure the new user entered all the needed information
+	public static boolean checkRegistry(String first, String last,String user, String pass, String email, String question, String answer,
+										String address, String state, String zip, String ssn) {
+		if(first.length() == 0) {
+			AlertBox.display("First Name", "You Must Enter a Name for \"First Name\"");
+			return false;
+		}
+		
+		if(last.length() == 0) {
+			AlertBox.display("Last Name", "You Must Enter a Name for \"Last Name\"");
+			return false;
+		}
+		if (user.length() == 0) {
+			AlertBox.display("User Name", "You Must Enter a Name for \"User Name\"");
+			return false;
+		}
+			
+		if (userNameExists(user) || user.length() == 0) {
+			AlertBox.display("User Name", "The User Name You Entered Already Exists");
+			return false;
+		}
+		
+		
+	//	if (!validPass(pass)) {
+	//		AlertBox.display("Invalid Password", "Your Password Must Match or Surpass our Requirments");
+	//		return false;
+	//	}
+		
+		if (email.length() == 0) {
+			AlertBox.display("E-Mail", "You must Enter an E-Mail Address for \"E-Mail\"");
+			return false;
+		}
+		
+		if (emailExists(email)) {
+			AlertBox.display("E-Mail", "The User E-Mail You Entered Already Exists");
+			return false;
+		}
+		
+		if (question.equalsIgnoreCase("Select a Question")) {
+			AlertBox.display("Security Question", "You Must Pick a Question");
+			return false;
+		}
+		
+		if (answer.length() == 0) {
+			AlertBox.display("Security Answer", "You Must Enter Something for the Answer\nThis is for Your Own Good");
+			return false;
+		}
+		
+		if (address.length() == 0) {
+			AlertBox.display("Address", "You Must Enter an Address for \"Address\"");
+			return false;
+		}
+		
+		if (state.length() == 0) {
+			AlertBox.display("State", "You Must Enter a State for \"State\"");
+			return false;
+		}
+		
+		if (!isInt(zip) || zip.length() == 0) {
+			AlertBox.display("Zip Code", "You Must Enter a valid Zip Code for \"Zip Code\"");
+			return false;
+		}
+		
+		if (!isInt(ssn) || ssn.length() != 9) {
+			AlertBox.display("Social Security Number", "You Must Enter a valid Social Security Number for \"Social Security Number\"");
+			return false;
+		}
+		
+		
+		return true;
+	}
+
+	// used to make sure the email is unique in the database
+ 	public static boolean emailExists(String email) {
+		
+		try {
+			Connection conn = getConnection();
+			
+			String searchStr = "SELECT user_email FROM user WHERE user_email = ?";
+			
+			PreparedStatement preparedSearch = conn.prepareStatement(searchStr);
+			
+			preparedSearch.setString(1, email);
+			
+			ResultSet result = preparedSearch.executeQuery();
+			
+			String exists = null;
+			while(result.next()) {
+				
+				exists  = result.getString("user_email");				
+			}
+			
+			if (exists != null) {
+				return true;
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+ // used to make sure the user name is unique in the database
+	public static boolean userNameExists(String userName) {
+		
+		try {
+			Connection conn = getConnection();
+			
+			String searchStr = "SELECT username FROM user WHERE username = ?";
+			
+			PreparedStatement preparedSearch = conn.prepareStatement(searchStr);
+			
+			preparedSearch.setString(1, userName);
+			
+			ResultSet result = preparedSearch.executeQuery();
+			
+			String exists = null;
+			while(result.next()) {
+				
+				exists  = result.getString("username");				
+			}
+			
+			if (exists != null) {
+				return true;
+			}
+			
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 }
