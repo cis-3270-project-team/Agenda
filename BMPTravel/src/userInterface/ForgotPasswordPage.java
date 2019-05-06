@@ -1,6 +1,5 @@
 package userInterface;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import programBackbone.Method;
 
 public class ForgotPasswordPage extends MainMenu {
 
@@ -52,18 +52,7 @@ public class ForgotPasswordPage extends MainMenu {
 
 		grid.getChildren().addAll(UserNameLB, UserNameTF, EnterBT, ExitBT);
 		
-		EnterBT.setOnAction(event ->{
-
-			ForgotPasswordNext next = new ForgotPasswordNext();
-
-			try { 
-				next.start(primaryStage);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			});
+		EnterBT.setOnAction(event -> Method.forgotStage2(window));
 		
 		scene = new Scene(grid, 650, 280);
 		window.setScene(scene);

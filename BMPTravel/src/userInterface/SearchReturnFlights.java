@@ -1,5 +1,6 @@
 package userInterface;
 
+import database.DBMethod;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -66,9 +67,9 @@ public class SearchReturnFlights extends MainMenu {
 		seats.setMinWidth(30);
 		seats.setCellValueFactory(new PropertyValueFactory<>("seatsAvailable"));
 	
-returnFlights = new TableView<>();
+		returnFlights = new TableView<>();
 		
-		ObservableList<Flights> flights = Method.searchFlights();
+		ObservableList<Flights> flights = DBMethod.searchFlights();
 		
 		returnFlights.setItems(flights);
 		
@@ -76,23 +77,13 @@ returnFlights = new TableView<>();
 		
 		backBT = new Button("back");
 		
-		backBT.setOnAction(e -> {
-			SearchOutbound searchFlights = new SearchOutbound();
-			
-			try {
-				
-				searchFlights.start(window, u1);
-				
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
+		backBT.setOnAction(e -> Method.searchFlights(window, u1));
 		
 		bookFlightBT = new Button("Book Flight");
 		
 		bookFlightBT.setOnAction(e -> {
 			Method.bookFlight(u1, returnFlights.getSelectionModel().getSelectedItems());
+			
 		});
 		
 		

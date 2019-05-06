@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import programBackbone.Admin;
+import programBackbone.Method;
 import programBackbone.User;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -55,46 +56,15 @@ public class HomepageAdmin extends MainMenu {
 		grid.getChildren().addAll(searchFlightBT, accountHistoryBT, logoutBT, helloLB, updateFlightsInfoBT);
 		
 
-		logoutBT.setOnAction(event -> {
-
-			MainMenu mainmenu = new MainMenu(); 
-
-			try {
-				mainmenu.start(primaryStage); 
-			}	
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
+		logoutBT.setOnAction(event -> Method.mainMenu(window));
 		
-
-		updateFlightsInfoBT.setOnAction(e -> {
+		updateFlightsInfoBT.setOnAction(e -> Method.updateTable(window, a1));
 		
-			UpdateFlightsTable updateTable = new UpdateFlightsTable();
-
-			try {
-			
-				updateTable.start(primaryStage, a1);
+		searchFlightBT.setOnAction(e -> {
 				
-			}
-			catch(Exception ufte) {
-				System.out.println(ufte);
-				ufte.printStackTrace();
-			}
-			
-		});
-		
-			searchFlightBT.setOnAction(e -> {
-		
-		SearchOutbound searchOutbound = new SearchOutbound();
-		
-		try {
-			searchOutbound.start(primaryStage, a1);
-		}
-		catch (Exception e2) {
-			System.out.println(e2);
-			e2.printStackTrace();
-		}
+			User u1 = a1;
+				
+			Method.searchFlights(window, u1);
 		});		
 
 		scene = new Scene(grid, 600, 300);

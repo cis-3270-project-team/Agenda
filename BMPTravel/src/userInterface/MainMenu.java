@@ -1,5 +1,6 @@
 package userInterface;
 
+import database.DBMethod;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,6 +14,8 @@ import programBackbone.Method;
 import programBackbone.User;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class MainMenu extends Application{ 
@@ -24,6 +27,8 @@ public class MainMenu extends Application{
 	TextField userNameTF, passwordTF; 
 
 	Button loginBT, registerBT, exitBT, forgotPassBT;
+	
+	Region emptySpace1, emptySpace2;
 
 	Stage window;
 
@@ -58,6 +63,9 @@ public class MainMenu extends Application{
 		userNameTF = new TextField();
 		passwordLB = new Label("Password:");
 		passwordTF = new TextField();
+		
+		emptySpace1 = new Region();
+		emptySpace2 = new Region();
 
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(10, 10, 10, 10));
@@ -65,73 +73,40 @@ public class MainMenu extends Application{
 		grid.setHgap(10);
 
 		GridPane.setConstraints(userNameLB, 0, 0); 
-		GridPane.setConstraints(userNameTF, 0, 1);
-		GridPane.setConstraints(passwordLB, 0, 2);
-		GridPane.setConstraints(passwordTF, 0, 3);
+		GridPane.setConstraints(userNameTF, 1, 0);
+		GridPane.setConstraints(passwordLB, 0, 3);
+		GridPane.setConstraints(passwordTF, 1, 3);
 		GridPane.setConstraints(loginBT, 0, 4);
 		GridPane.setConstraints(registerBT, 0, 5);
-		GridPane.setConstraints(exitBT, 42, 0);
-		GridPane.setConstraints(forgotPassBT, 0, 7);
+		GridPane.setConstraints(exitBT, 15, 0);
+		GridPane.setConstraints(forgotPassBT, 0, 8);
 		
 		grid.getChildren().addAll(userNameLB, userNameTF, passwordLB, passwordTF, loginBT, registerBT, exitBT, forgotPassBT); 
 
-		scene = new Scene(grid, 650, 280);
+		scene = new Scene(grid, 500, 250);
 		window.setScene(scene);
 		
 		window.setOnCloseRequest(event -> closeProgram()) ;
 
-		registerBT.setOnAction(event -> {
-			
-			RegisterWindow registerwindow = new RegisterWindow(); 
-
-			try {
-				registerwindow.start(primaryStage);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}); 
+		registerBT.setOnAction(event -> Method.register(window)); 
+		
 		loginBT.setOnAction(event1 -> {
 
-			u1 = Method.login(userNameTF.getText(), passwordTF.getText());
+			u1 = DBMethod.login(userNameTF.getText(), passwordTF.getText());
 			
-			try {
-				if (u1 instanceof Admin) {
+			if (u1 instanceof Admin) {
 				
-					Admin a1 = (Admin) u1;
+				Admin a1 = (Admin) u1;
 				
-					HomepageAdmin homepageAdmin = new HomepageAdmin();
+				Method.homepageAdmin(window, a1);
 				
-					homepageAdmin.start(primaryStage, a1);
-				
-				}
-				else {
-					HomePage homepage = new HomePage(); 
-			
-					homepage.start(primaryStage, u1);
-				}
-				
-			}catch (NullPointerException npe) {
-				npe.printStackTrace();
-				
-				System.out.println("Caught");
-				
-				AlertBox.display("Invalid UserName or Password", "The User Name and/or Password is Incorrect");
-			
-			}catch (Exception e) {
-				e.printStackTrace();
+			}
+			else {
+				Method.homepage(window, u1);
 			}
 			});
 		
-		forgotPassBT.setOnAction(e -> {
-			try {
-				ForgotPasswordPage forgotPage = new ForgotPasswordPage();
-				
-				forgotPage.start(primaryStage);
-				
-			}catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		});
+		forgotPassBT.setOnAction(e -> Method.forgotStage1(window));
 		
 		window.show();
 	}

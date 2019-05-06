@@ -1,10 +1,14 @@
 package userInterface;
 
 import programBackbone.Method;
+import database.DBMethod;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -26,8 +30,11 @@ public class UpdateFlightsTable extends MainMenu {
 	Region emptySpace;
 
 	TextField airlineTF, originCityTF, destinationCityTF, flightCapacityTF,
-	flightNumberTF, departureDateTF, arrivalDateTF, departureTimeTF, 
-	arrivalTimeTF, seatsAvailableTF;
+	flightNumberTF, departureTimeTF, arrivalTimeTF, seatsAvailableTF;
+	
+	ChoiceBox<String> monthHere, dayHere, yearHere, monthThere, dayThere, yearThere;
+	
+	Label dateHereLB, dateThereLB;
 	
 	CheckBox isFilledCB;
 
@@ -38,6 +45,8 @@ public class UpdateFlightsTable extends MainMenu {
 	HBox hBox, hBox2, hBox3; 
 
 	Scene scene; 
+	
+	@SuppressWarnings({ "unchecked", "static-access" })
 	public void start(Stage primaryStage, Admin a1) {
 		
 		window = primaryStage; 
@@ -63,12 +72,6 @@ public class UpdateFlightsTable extends MainMenu {
 		flightNumberTF = new TextField();
 		flightNumberTF.setPromptText("flightNumber");
 
-		departureDateTF = new TextField();
-		departureDateTF.setPromptText("departureDate");
-
-		arrivalDateTF = new TextField();
-		arrivalDateTF.setPromptText("arrivalDate");
-
 		departureTimeTF = new TextField();
 		departureTimeTF.setPromptText("departureTime");
 
@@ -80,53 +83,85 @@ public class UpdateFlightsTable extends MainMenu {
 
 		isFilledCB = new CheckBox("isFull");
 		
+		monthHere = new ChoiceBox<>();
+		monthHere.getItems().addAll("January", "February", "March", "April", "May", "June", "July", "August",
+									"August", "September", "October", "November", "December");
+		monthHere.setValue("January");
+		
+		dayHere = new ChoiceBox<>();
+		dayHere.getItems().addAll("1","2","3","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20",
+								"21","22","23","24","25","26","27","27","28","29","30","31");
+		dayHere.setValue("1");
+		
+		yearHere = new ChoiceBox<>();
+		yearHere.getItems().addAll("2019","2020","2021","2022","2023","2024","2025");
+		yearHere.setValue("2019");
+		
+		monthThere = new ChoiceBox<>();
+		monthThere.getItems().addAll("January", "February", "March", "April", "May", "June", "July", "August",
+				"August", "September", "October", "November", "December");
+		monthThere.setValue("January");
+		
+		dayThere = new ChoiceBox<>();
+		dayThere.getItems().addAll("1","2","3","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20",
+				"21","22","23","24","25","26","27","27","28","29","30","31");
+		dayThere.setValue("1");
+		
+		yearThere = new ChoiceBox<>();
+		yearThere.getItems().addAll("2019","2020","2021","2022","2023","2024","2025");
+		yearThere.setValue("2019");
+		
+		dateHereLB = new Label("Departure Date");
+		
+		dateThereLB = new Label("Arrival Date");
+		
 		//airline column
-		TableColumn<Flights, String> airlineColumn = new TableColumn("Airline"); 
-		airlineColumn.setMinWidth(200); 
+		TableColumn<Flights, String> airlineColumn = new TableColumn<>("Airline"); 
+		airlineColumn.setMinWidth(75); 
 		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("airline"));
 
-		TableColumn<Flights, String> originCityColumn = new TableColumn("Origin City"); 
-		airlineColumn.setMinWidth(200); 
-		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("originCity"));
+		TableColumn<Flights, String> originCityColumn = new TableColumn<>("Origin City"); 
+		originCityColumn.setMinWidth(150); 
+		originCityColumn.setCellValueFactory(new PropertyValueFactory<>("originCity"));
 
-		TableColumn<Flights, String> destinationCityColumn = new TableColumn("Destination City"); 
-		airlineColumn.setMinWidth(200); 
-		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("destinationCity"));
+		TableColumn<Flights, String> destinationCityColumn = new TableColumn<>("Destination City"); 
+		destinationCityColumn.setMinWidth(150); 
+		destinationCityColumn.setCellValueFactory(new PropertyValueFactory<>("destinationCity"));
 
-		TableColumn<Flights, String> flightCapacityColumn = new TableColumn("Flight Capacity"); 
-		airlineColumn.setMinWidth(200); 
-		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("flightCapacity"));
+		TableColumn<Flights, String> flightCapacityColumn = new TableColumn<>("Flight Capacity"); 
+		flightCapacityColumn.setMinWidth(50); 
+		flightCapacityColumn.setCellValueFactory(new PropertyValueFactory<>("flightCapacity"));
 
-		TableColumn<Flights, String> flightNumberColumn = new TableColumn("Flight Number"); 
-		airlineColumn.setMinWidth(200); 
-		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("flightNumber"));
+		TableColumn<Flights, String> flightNumberColumn = new TableColumn<>("Flight Number"); 
+		flightNumberColumn.setMinWidth(60); 
+		flightNumberColumn.setCellValueFactory(new PropertyValueFactory<>("flightNumber"));
 
-		TableColumn<Flights, String> departureDateColumn = new TableColumn("Departure Date"); 
-		airlineColumn.setMinWidth(200); 
-		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("departureDate"));
+		TableColumn<Flights, String> departureDateColumn = new TableColumn<>("Departure Date"); 
+		departureDateColumn.setMinWidth(75); 
+		departureDateColumn.setCellValueFactory(new PropertyValueFactory<>("departureDate"));
 
-		TableColumn<Flights, String> arrivalDateColumn = new TableColumn("Arrival Date"); 
-		airlineColumn.setMinWidth(200); 
-		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("arrivalDate"));
+		TableColumn<Flights, String> arrivalDateColumn = new TableColumn<>("Arrival Date"); 
+		arrivalDateColumn.setMinWidth(75); 
+		arrivalDateColumn.setCellValueFactory(new PropertyValueFactory<>("arrivalDate"));
 
-		TableColumn<Flights, String> departureTimeColumn = new TableColumn("Departure Time"); 
-		airlineColumn.setMinWidth(200); 
-		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
+		TableColumn<Flights, String> departureTimeColumn = new TableColumn<>("Departure Time"); 
+		departureTimeColumn.setMinWidth(75); 
+		departureTimeColumn.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
 
-		TableColumn<Flights, String> arrivalTimeColumn = new TableColumn("Arrival Time"); 
-		airlineColumn.setMinWidth(200); 
-		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
+		TableColumn<Flights, String> arrivalTimeColumn = new TableColumn<>("Arrival Time"); 
+		arrivalTimeColumn.setMinWidth(75); 
+		arrivalTimeColumn.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
 
-		TableColumn<Flights, String> seatsAvailableColumn = new TableColumn("Seats Available"); 
-		airlineColumn.setMinWidth(200); 
-		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("seatsAvailable"));
+		TableColumn<Flights, String> seatsAvailableColumn = new TableColumn<>("Seats Available"); 
+		seatsAvailableColumn.setMinWidth(50); 
+		seatsAvailableColumn.setCellValueFactory(new PropertyValueFactory<>("seatsAvailable"));
 
-		TableColumn<Flights, String> isFilledColumn = new TableColumn("is Filled"); 
-		airlineColumn.setMinWidth(200); 
-		airlineColumn.setCellValueFactory(new PropertyValueFactory<>("isFilled"));
+		TableColumn<Flights, String> isFilledColumn = new TableColumn<>("is Filled"); 
+		isFilledColumn.setMinWidth(30); 
+		isFilledColumn.setCellValueFactory(new PropertyValueFactory<>("isFilled"));
 		
 		table = new TableView<>(); 
-		ObservableList<Flights> flights = Method.searchFlights();
+		ObservableList<Flights> flights = DBMethod.searchFlights();
 		table.setItems(flights); 
 		table.getColumns().addAll(airlineColumn,originCityColumn, destinationCityColumn, 
 		flightCapacityColumn, flightNumberColumn, departureDateColumn, arrivalDateColumn, 
@@ -138,32 +173,24 @@ public class UpdateFlightsTable extends MainMenu {
 		hBox2.getChildren().addAll(airlineTF, originCityTF, destinationCityTF, flightCapacityTF, flightNumberTF); 
 		
 		hBox3 = new HBox();
-		hBox3.getChildren().addAll(departureDateTF, arrivalDateTF, departureTimeTF, arrivalTimeTF, seatsAvailableTF, isFilledCB);
+		hBox3.getChildren().addAll(dateHereLB, monthHere, dayHere, yearHere, dateThereLB, monthThere, dayThere, yearThere, departureTimeTF, arrivalTimeTF, seatsAvailableTF, isFilledCB);
 
 		hBox = new HBox(); 
 		hBox.setHgrow(emptySpace, Priority.ALWAYS);
 		hBox.getChildren().addAll(addBT, deleteBT, updateBT, emptySpace, backBT);
 
 		vBox = new VBox();
+		vBox.setPadding(new Insets(10, 10, 10, 10));
 		vBox.getChildren().addAll(table,hBox2, hBox3, hBox); 
 		
-		backBT.setOnAction(e ->{
-			HomepageAdmin homepage = new HomepageAdmin();
-			
-			try {
-				homepage.start(window, a1);
-			}
-			catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		});
+		backBT.setOnAction(e -> Method.homepageAdmin(window, a1));
 		
 		addBT.setOnAction(e -> {
 			Flights f1 = Method.makeFlight(airlineTF.getText(), originCityTF.getText(), destinationCityTF.getText(), 
-				flightCapacityTF.getText(), flightNumberTF.getText(), departureDateTF.getText(), arrivalDateTF.getText(),
-				departureTimeTF.getText(), arrivalTimeTF.getText(), seatsAvailableTF.getText(), isFilledCB);
+				flightCapacityTF.getText(), flightNumberTF.getText(), departureTimeTF.getText(), arrivalTimeTF.getText(), 
+				seatsAvailableTF.getText(), isFilledCB);
 			
-			if (Method.addFlight(f1)) {
+			if (DBMethod.addFlight(f1)) {
 				
 				table.getItems().add(f1);
 				
@@ -172,8 +199,12 @@ public class UpdateFlightsTable extends MainMenu {
 				destinationCityTF.clear();
 				flightCapacityTF.clear();
 				flightNumberTF.clear();
-				departureDateTF.clear();
-				arrivalDateTF.clear();
+				dayHere.setValue("1");
+				monthHere.setValue("January");
+				yearHere.setValue("2019");
+				dayThere.setValue("1");
+				monthThere.setValue("January");
+				yearThere.setValue("2019");
 				departureTimeTF.clear();
 				arrivalTimeTF.clear();
 				seatsAvailableTF.clear();
@@ -188,13 +219,13 @@ public class UpdateFlightsTable extends MainMenu {
 			
 			flight = table.getSelectionModel().getSelectedItems();
 			
-			if (Method.removeFlight(flight)) {
+			if (DBMethod.removeFlight(flight)) {
 				flight.forEach(allFlights::remove);
 			}
 			
 		});
 
-		Scene scene = new Scene(vBox); 
+		Scene scene = new Scene(vBox , 1100, 500); 
 		window.setScene(scene); 
 		window.show(); 
 	}

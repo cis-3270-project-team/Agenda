@@ -100,12 +100,4 @@ public abstract class User {
 		return this.accountType;
 	}
 	
-	public abstract void bookFlight();// use to register a user (and friends) on a flight
-		// details unknown
-	
-	public abstract void removeFlight(Object flight); // use to remove a booking from a flight
-		// details unknown
-	
-	public abstract Object getFlight(); // use to get flights from the database
-
 }

@@ -1,5 +1,6 @@
 package userInterface;
 
+import database.DBMethod;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -67,7 +68,7 @@ public class SearchOutbound extends MainMenu{
 		
 		outbound = new TableView<>();
 		
-		ObservableList<Flights> flights = Method.searchFlights();
+		ObservableList<Flights> flights = DBMethod.searchFlights();
 		
 		outbound.setItems(flights);
 		
@@ -80,43 +81,24 @@ public class SearchOutbound extends MainMenu{
 				
 				Admin a1 = (Admin) u1;
 			
-				HomepageAdmin homepage1 = new HomepageAdmin();
-				try {
-					homepage1.start(window, a1);
-				}
-				catch(Exception exc) {
-					System.out.println(exc);
-					exc.printStackTrace();
-				}
+				Method.homepageAdmin(window, a1);
 			}
 			else {
 				Customer c1 = (Customer) u1;
 				
-				HomePage homepage2 = new HomePage();
-				try {
-					homepage2.start(window, c1);
-				}
-				catch(Exception exc2) {
-					System.out.println(exc2);
-					exc2.printStackTrace();
-				}
+				Method.homepage(window, c1);
+				
 			}
 		});
 		
 		bookFlightBT = new Button("Book Flight");
 		
 		bookFlightBT.setOnAction(e -> {
-			if(Method.bookFlight(u1, outbound.getSelectionModel().getSelectedItems())) {
-				
-				SearchReturnFlights searchReturn = new SearchReturnFlights();
-				
-				try {
-					searchReturn.start(window, u1);
-				}
-				catch (Exception e2) {
-					AlertBox.display("We Are Sorry", "Something Went Wrong With Booking");
-					e2.printStackTrace();
-				}
+			
+			if(Method.bookFlight(u1, outbound.getSelectionModel().getSelectedItems())) {	
+			}
+			else {
+				AlertBox.display("We Are Sorry", "Something Went Wrong With Booking");
 			}
 		});
 		

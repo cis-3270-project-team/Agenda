@@ -1,8 +1,5 @@
 package programBackbone;
 
-import java.sql.*;
-import java.util.ArrayList;
-
 public class Customer extends User {
 
 	private String address;
@@ -67,50 +64,4 @@ public class Customer extends User {
 		return accountType;
 	}
 	
-	@Override
-	public String getPassword() { // use to give the user their password when they forget only if they have securityAnswer
-		// details unknown
-		
-		return super.getPassword();
-	}
-	
-	@Override
-	public void bookFlight() { // use to register a user (and friends) on a flight
-		// details unknown
-		
-	}
-	
-	@Override
-	public void removeFlight(Object flight) {// use to remove a booking from a flight
-		// details unknown
-		
-	}
-
-	@Override
-	public ArrayList<Flights> getFlight() { 
-		
-		ArrayList<Flights> f1 = new ArrayList<>(Method.searchFlights());
-		
-		if (f1.isEmpty()) {
-			return null;
-		}
-	
-		return f1;
-	}
-	
-	public void register(Customer c1) {
-
-		try {
-			//use method in Method to register the Customer
-			Method.registerUser(c1);
-			
-		}
-		catch (Exception e){
-			System.out.println("There was a problem registering");
-			System.out.println(e);
-		}
-
-	}
-
-
 }

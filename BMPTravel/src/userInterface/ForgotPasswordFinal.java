@@ -8,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import programBackbone.Method;
 
 public class ForgotPasswordFinal extends MainMenu {
 
@@ -43,15 +44,7 @@ public class ForgotPasswordFinal extends MainMenu {
 
 		grid.getChildren().addAll(UserNameLB, PasswordLB, mainMenuBT); 
 
-		mainMenuBT.setOnAction(event -> {
-		 MainMenu menu = new MainMenu(); 
-		 try {
-		  menu.start(primaryStage); 
-		 }
-		 catch (Exception e) {
-		  e.printStackTrace();
-		 }
-		});
+		mainMenuBT.setOnAction(event -> Method.mainMenu(window));
 
 		scene = new Scene(grid, 200, 200);
 		window.setScene(scene);

@@ -1,5 +1,6 @@
 package userInterface;
 
+import database.DBMethod;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -87,15 +88,7 @@ public class RegisterWindow extends Application{
 		HBox.setHgrow(emptySpace, Priority.ALWAYS);
 		paneH.getChildren().addAll(mainMenuBT, emptySpace, registerBT);
 		
-		mainMenuBT.setOnAction(e -> {
-			MainMenu main = new MainMenu();
-			try {
-				main.start(window);
-			}
-			catch(Exception e2) {
-				e2.printStackTrace();
-			}
-		});
+		mainMenuBT.setOnAction(e -> Method.mainMenu(window));
 		
 		registerBT.setOnAction(e -> {
 			
@@ -108,16 +101,9 @@ public class RegisterWindow extends Application{
 							emailTF.getText(), secQuestionCB.getValue(), secAnswerTF.getText(), addressTF.getText(), stateTF.getText(), 
 							Integer.parseInt(zipTF.getText()), Integer.parseInt(ssnTF.getText()));
 					
-					Method.registerUser(c1);
+					DBMethod.registerUser(c1);
 			
-					HomePage homepage = new HomePage(); 
-			
-					try {
-						homepage.start(primaryStage, c1);
-					}
-					catch (Exception ex) {
-						ex.printStackTrace();
-					}
+					Method.homepage(window, c1);
 				
 				}
 				});
