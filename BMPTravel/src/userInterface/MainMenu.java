@@ -17,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class MainMenu extends Application{ 
 	private static final int CENTER = 0;
@@ -27,8 +28,6 @@ public class MainMenu extends Application{
 	TextField userNameTF, passwordTF; 
 
 	Button loginBT, registerBT, exitBT, forgotPassBT;
-	
-	Region emptySpace1, emptySpace2;
 
 	Stage window;
 
@@ -40,11 +39,11 @@ public class MainMenu extends Application{
 
 	User u1;
 
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 
 		launch(args);
 
-	}
+	}*/
 
 	@Override
 
@@ -64,9 +63,6 @@ public class MainMenu extends Application{
 		passwordLB = new Label("Password:");
 		passwordTF = new TextField();
 		
-		emptySpace1 = new Region();
-		emptySpace2 = new Region();
-
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(10, 10, 10, 10));
 		grid.setVgap(8); 

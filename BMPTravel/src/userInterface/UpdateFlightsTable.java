@@ -1,13 +1,18 @@
 package userInterface;
 
 import programBackbone.Method;
+
+import java.time.LocalDate;
+
 import database.DBMethod;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -32,7 +37,9 @@ public class UpdateFlightsTable extends MainMenu {
 	TextField airlineTF, originCityTF, destinationCityTF, flightCapacityTF,
 	flightNumberTF, departureTimeTF, arrivalTimeTF, seatsAvailableTF;
 	
-	ChoiceBox<String> monthHere, dayHere, yearHere, monthThere, dayThere, yearThere;
+	DatePicker dateHereDP, dateThereDP;
+	
+	LocalDate dateHereLD, dateThereLD;
 	
 	Label dateHereLB, dateThereLB;
 	
@@ -83,33 +90,9 @@ public class UpdateFlightsTable extends MainMenu {
 
 		isFilledCB = new CheckBox("isFull");
 		
-		monthHere = new ChoiceBox<>();
-		monthHere.getItems().addAll("January", "February", "March", "April", "May", "June", "July", "August",
-									"August", "September", "October", "November", "December");
-		monthHere.setValue("January");
+		dateHereDP = new DatePicker();
 		
-		dayHere = new ChoiceBox<>();
-		dayHere.getItems().addAll("1","2","3","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20",
-								"21","22","23","24","25","26","27","27","28","29","30","31");
-		dayHere.setValue("1");
-		
-		yearHere = new ChoiceBox<>();
-		yearHere.getItems().addAll("2019","2020","2021","2022","2023","2024","2025");
-		yearHere.setValue("2019");
-		
-		monthThere = new ChoiceBox<>();
-		monthThere.getItems().addAll("January", "February", "March", "April", "May", "June", "July", "August",
-				"August", "September", "October", "November", "December");
-		monthThere.setValue("January");
-		
-		dayThere = new ChoiceBox<>();
-		dayThere.getItems().addAll("1","2","3","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20",
-				"21","22","23","24","25","26","27","27","28","29","30","31");
-		dayThere.setValue("1");
-		
-		yearThere = new ChoiceBox<>();
-		yearThere.getItems().addAll("2019","2020","2021","2022","2023","2024","2025");
-		yearThere.setValue("2019");
+		dateThereDP = new DatePicker();
 		
 		dateHereLB = new Label("Departure Date");
 		
@@ -161,7 +144,9 @@ public class UpdateFlightsTable extends MainMenu {
 		isFilledColumn.setCellValueFactory(new PropertyValueFactory<>("isFilled"));
 		
 		table = new TableView<>(); 
+		
 		ObservableList<Flights> flights = DBMethod.searchFlights();
+		
 		table.setItems(flights); 
 		table.getColumns().addAll(airlineColumn,originCityColumn, destinationCityColumn, 
 		flightCapacityColumn, flightNumberColumn, departureDateColumn, arrivalDateColumn, 
@@ -173,7 +158,7 @@ public class UpdateFlightsTable extends MainMenu {
 		hBox2.getChildren().addAll(airlineTF, originCityTF, destinationCityTF, flightCapacityTF, flightNumberTF); 
 		
 		hBox3 = new HBox();
-		hBox3.getChildren().addAll(dateHereLB, monthHere, dayHere, yearHere, dateThereLB, monthThere, dayThere, yearThere, departureTimeTF, arrivalTimeTF, seatsAvailableTF, isFilledCB);
+		hBox3.getChildren().addAll(dateHereLB, dateHereDP, dateThereLB, dateThereDP, departureTimeTF, arrivalTimeTF, seatsAvailableTF, isFilledCB);
 
 		hBox = new HBox(); 
 		hBox.setHgrow(emptySpace, Priority.ALWAYS);
@@ -186,8 +171,13 @@ public class UpdateFlightsTable extends MainMenu {
 		backBT.setOnAction(e -> Method.homepageAdmin(window, a1));
 		
 		addBT.setOnAction(e -> {
-			Flights f1 = Method.makeFlight(airlineTF.getText(), originCityTF.getText(), destinationCityTF.getText(), 
-				flightCapacityTF.getText(), flightNumberTF.getText(), departureTimeTF.getText(), arrivalTimeTF.getText(), 
+			
+			dateHereLD = dateHereDP.getValue();
+			
+			dateThereLD = dateThereDP.getValue();
+			
+			Flights f1 = Method.makeFlight(airlineTF.getText(), originCityTF.getText(), destinationCityTF.getText(), flightCapacityTF.getText(), 
+				flightNumberTF.getText(), dateHereLD, dateThereLD, departureTimeTF.getText(), arrivalTimeTF.getText(), 
 				seatsAvailableTF.getText(), isFilledCB);
 			
 			if (DBMethod.addFlight(f1)) {
@@ -199,28 +189,28 @@ public class UpdateFlightsTable extends MainMenu {
 				destinationCityTF.clear();
 				flightCapacityTF.clear();
 				flightNumberTF.clear();
-				dayHere.setValue("1");
-				monthHere.setValue("January");
-				yearHere.setValue("2019");
-				dayThere.setValue("1");
-				monthThere.setValue("January");
-				yearThere.setValue("2019");
 				departureTimeTF.clear();
 				arrivalTimeTF.clear();
 				seatsAvailableTF.clear();
 				isFilledCB.setSelected(false);
+				
 			}
 		});
 		
 		deleteBT.setOnAction(e ->{
-			ObservableList<Flights> flight, allFlights;
+						
+			ObservableList<Flights> obsFlight, allFlights;
+			
+			Flights flight;
 			
 			allFlights = table.getItems();
 			
-			flight = table.getSelectionModel().getSelectedItems();
+			obsFlight = table.getSelectionModel().getSelectedItems();
+			
+			flight = table.getSelectionModel().getSelectedItem();
 			
 			if (DBMethod.removeFlight(flight)) {
-				flight.forEach(allFlights::remove);
+				obsFlight.forEach(allFlights::remove);
 			}
 			
 		});

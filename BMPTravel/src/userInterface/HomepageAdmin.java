@@ -55,7 +55,14 @@ public class HomepageAdmin extends MainMenu {
 		
 		grid.getChildren().addAll(searchFlightBT, accountHistoryBT, logoutBT, helloLB, updateFlightsInfoBT);
 		
-
+		accountHistoryBT.setOnAction(e -> {
+		
+			User u1 = a1;
+			
+			Method.history(window, u1);
+		
+		});
+		
 		logoutBT.setOnAction(event -> Method.mainMenu(window));
 		
 		updateFlightsInfoBT.setOnAction(e -> Method.updateTable(window, a1));

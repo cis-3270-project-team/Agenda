@@ -1,7 +1,12 @@
 package programBackbone;
 
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 
 public class Flights {
@@ -19,7 +24,7 @@ public class Flights {
     private String departureTime;	
     private String arrivalTime;		
     private int seatsAvailable;		
-    private Boolean isFilled;		
+    private boolean isFilled;		
 
     public Flights() {
 
@@ -35,7 +40,7 @@ public class Flights {
         this.seatsAvailable = seats_available;
         this.flightNumber = flightNumber;
         this.departureDate = departureDate;
-        this.arrivalTime = arrivalTime;
+        this.arrivalDate = arrivalDate;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.isFilled = isFilled;
@@ -114,20 +119,20 @@ public class Flights {
 		this.arrivalTime = arrivalTime;
 	}
 
-	public Boolean getIsFilled() {
-		return isFilled;
-	}
-
-	public void setIsFilled(Boolean isFilled) {
-		this.isFilled = isFilled;
-	}
-
 	public int getSeatsAvailable() {
 		return seatsAvailable;
 	}
 
 	public void setSeatsAvailable(int seatsAvailable) {
 		this.seatsAvailable = seatsAvailable;
+	}
+
+	public boolean isFilled() {
+		return isFilled;
+	}
+
+	public void setFilled(boolean isFilled) {
+		this.isFilled = isFilled;
 	}
 
 	@Override
@@ -146,9 +151,10 @@ public class Flights {
 				+ getDepartureDate() + ", getArrivalDate()=" + getArrivalDate()
 				+ ", getDepartureTime()=" + getDepartureTime()
 				+ ", getArrivalTime()=" + getArrivalTime() + ", getIsFilled()="
-				+ getIsFilled() + ", getClass()=" + getClass()
+				+ isFilled() + ", getClass()=" + getClass()
 				+ ", hashCode()=" + hashCode() + ", toString()="
 				+ super.toString() + "]";
 	}
+	
 }
     

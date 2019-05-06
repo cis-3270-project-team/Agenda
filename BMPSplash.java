@@ -1,4 +1,4 @@
-package GUI;
+package userInterface;
 
 import java.io.FileNotFoundException;
 

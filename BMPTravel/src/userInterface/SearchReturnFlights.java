@@ -9,6 +9,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import programBackbone.Admin;
@@ -26,11 +28,13 @@ public class SearchReturnFlights extends MainMenu {
 	
 	TableView<Flights> returnFlights;
 	
+	Region emptySpace;
+	
 	VBox vBox;
 	
 	HBox bottom;
 	
-	Button backBT, bookFlightBT;
+	Button backBT, bookFlightBT, logoutBT;
 	
 	
 	public void start(Stage primaryStage, User u1) {
@@ -82,13 +86,24 @@ public class SearchReturnFlights extends MainMenu {
 		bookFlightBT = new Button("Book Flight");
 		
 		bookFlightBT.setOnAction(e -> {
-			Method.bookFlight(u1, returnFlights.getSelectionModel().getSelectedItems());
+			
+			Flights f1 = (Flights) returnFlights.getSelectionModel().getSelectedItems();
+			
+			if(Method.bookFlight(u1, f1)) {
+				Method.history(window, u1);
+			}
 			
 		});
 		
+		logoutBT = new Button();
+		
+		logoutBT.setOnAction(e -> Method.mainMenu(window));
+		
+		emptySpace = new Region();
 		
 		bottom = new HBox();
-		bottom.getChildren().addAll(backBT, bookFlightBT);
+		bottom.setHgrow(emptySpace, Priority.ALWAYS);
+		bottom.getChildren().addAll(backBT, bookFlightBT, emptySpace, logoutBT);
 		bottom.setPadding(new Insets(10, 10, 10, 10));
 		bottom.setSpacing(10);
 		

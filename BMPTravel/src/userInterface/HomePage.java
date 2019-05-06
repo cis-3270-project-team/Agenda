@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import programBackbone.Method;
 import programBackbone.User;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -30,14 +31,14 @@ public class HomePage extends MainMenu {
 	User u1;
 
 
-		public void start(Stage primaryStage, User u1)  {
+	public void start(Stage primaryStage, User u1)  {
 		window = primaryStage; 
 		window.setTitle("Home Page");
 
 		searchFlightBT = new Button("Search for a Flight"); 
 		accountHistoryBT = new Button("Account History List");
 		logoutBT = new Button("Logout");
-		helloLB = new Label ("Hello, and welcome back " + u1.getFirstName() + "!"); 
+		helloLB = new Label ("Hello, and welcome back " + u1.getUserName() + "!"); 
 
 		GridPane grid = new GridPane(); 
 		grid.setPadding(new Insets(10, 10, 10, 10));
@@ -51,15 +52,22 @@ public class HomePage extends MainMenu {
 
 		grid.getChildren().addAll(searchFlightBT, accountHistoryBT, logoutBT, helloLB);
 
-		logoutBT.setOnAction(event -> {
-			MainMenu mainmenu = new MainMenu(); 
+		searchFlightBT.setOnAction(e -> Method.searchFlights(window, u1));
+		
+		 //Method.history(window, u1)
+		accountHistoryBT.setOnAction(e -> {
+			AccountHistory history = new AccountHistory();
+			
 			try {
-				mainmenu.start(primaryStage); 
+				history.start(window, u1);
 			}
-			catch (Exception e) {
-				e.printStackTrace();
+			catch (Exception e2) {
+				PUCBox.display();
+				e2.printStackTrace();
 			}
 		});
+		
+		logoutBT.setOnAction(event -> Method.mainMenu(window));
 
 		scene = new Scene(grid, 600, 300);
 		window.setScene(scene);

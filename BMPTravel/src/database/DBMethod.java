@@ -16,6 +16,7 @@ import programBackbone.Flights;
 import programBackbone.Method;
 import programBackbone.User;
 import userInterface.AlertBox;
+import userInterface.PUCBox;
 
 public class DBMethod {
 
@@ -82,7 +83,7 @@ public class DBMethod {
 			Connection conn = getConnection();
 			
 			PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS ticket(user_email varchar(40), numberflight int(6), "
-					+ "PRIMARY KEY (user_email, flightid))");
+					+ "PRIMARY KEY (user_email, numberflight))");
 			
 			create.executeUpdate();
 			
@@ -441,7 +442,7 @@ public class DBMethod {
 	public static User login(String userN, String pass) {
 			
 		// make sure the user name and password are not null
-		if (userN != null && pass != null) {
+		if (userN.length() > 0 && pass.length() >= 7) {
 				
 			
 			try {
@@ -490,13 +491,18 @@ public class DBMethod {
 			}
 			catch (SQLException sqle) {
 				AlertBox.display("Invalid UserName or Password", "The User Name and/or Password is Incorrect");
-				System.out.println(sqle);
+				sqle.printStackTrace();
+			}
+			catch (NullPointerException npe) {
+				AlertBox.display("Invalid UserName or Password", "The User Name and/or Password is Incorrect");
+				npe.printStackTrace();
 			}// a broad catch if anything goes wrong
 			catch (Exception e) {
 				AlertBox.display("Invalid UserName or Password", "The User Name and/or Password is Incorrect");
-				System.out.println(e);
+				e.printStackTrace();
 			}
 		}
+		AlertBox.display("User Name / Password Missing", "You Can Only Enter BMP Travel If You Are a Registered Member");
 		return null;
 	}
 		
@@ -592,7 +598,7 @@ public class DBMethod {
 	public static boolean isBooked(User u1, Flights f1) {
 			
 			
-		int flightID = f1.getFlightNumber();
+		int numberflight = f1.getFlightNumber();
 		
 		String user = u1.getEmail();
 			
@@ -600,17 +606,18 @@ public class DBMethod {
 				
 			Connection conn = getConnection();
 		
-			String searchStr = "SELECT user_name FROM ticket WHERE user_email = ? AND flightid = ?";
+			String searchStr = "SELECT user_email FROM ticket WHERE user_email = ? AND numberflight = ?";
 		
 			PreparedStatement preparedSearch = conn.prepareStatement(searchStr);
 			
 			preparedSearch.setString(1, user);
-			preparedSearch.setInt(2, flightID);
+			preparedSearch.setInt(2, numberflight);
 			
 			ResultSet result = preparedSearch.executeQuery();
 			
 			while(result.isBeforeFirst()) {
 					
+				AlertBox.display("Double Minded Person", "You Are Already Booked in this Flight");
 				return true;
 			}
 			
@@ -699,7 +706,9 @@ public class DBMethod {
 			preBook.setInt(2, f1.getFlightNumber());
 			
 			preMarkFlights.setInt(1, seats);
-			preMarkFlights.setInt(1, f1.getFlightNumber());
+			preMarkFlights.setInt(2, f1.getFlightNumber());
+			
+		//	System.out.println(f1.getFlightNumber);
 			
 			preBook.executeUpdate();
 			preMarkFlights.executeUpdate();
@@ -751,8 +760,8 @@ public class DBMethod {
 		Connection conn = getConnection();
 		
 		String addFlightStr = "INSERT INTO flights(numberflight, airline, origin_city, destination_city, departure_time,"
-				+ " arrival_time, departure_date, arrival_date, capactiy, seats_available, seats_occupied, isfull) VALUSE"
-				+ " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " arrival_time, departure_date, arrival_date, capactiy, seats_available, seats_occupied, isfull) VALUES"
+				+ " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try {
 			PreparedStatement preAddFlight = conn.prepareStatement(addFlightStr);
@@ -768,7 +777,7 @@ public class DBMethod {
 			preAddFlight.setInt(9, f1.getFlightCapacity());
 			preAddFlight.setInt(10, f1.getSeatsAvailable());
 			preAddFlight.setInt(11,f1.getFlightCapacity() - f1.getSeatsAvailable());
-			preAddFlight.setBoolean(12, f1.getIsFilled());
+			preAddFlight.setBoolean(12, f1.isFilled());
 			
 			preAddFlight.executeUpdate();
 			
@@ -778,24 +787,153 @@ public class DBMethod {
 			
 		}
 		catch (Exception e) {
-			AlertBox.display("Problem", "There was a problem putting the new flight into the database");
 			e.printStackTrace();
+			AlertBox.display("Problem", "There was a problem putting the new flight into the database");
 		}
 		return false;
 	}
 
-	public static boolean removeFlight(ObservableList<Flights> flight) {
-		
-		Flights f1 = (Flights) flight;
+	public static boolean removeFlightTickes(Flights f1) {
 		
 		Connection conn = getConnection();
 		
-		String removeFlightStr = "REMOVE FROM flights WHERE numberflight = ?";
+		String removeFlightStr = "DELETE FROM ticket WHERE numberflight = ?";
 		
 		try {
 			PreparedStatement removeFlight = conn.prepareStatement(removeFlightStr);
 			
 			removeFlight.setInt(1, f1.getFlightNumber());
+			
+			removeFlight.executeUpdate();
+			
+			conn.close();
+			
+			return true;
+		}
+		catch (Exception e) {
+			AlertBox.display("Problem", "There was a problem removing Your flight from the database");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public static ObservableList<Flights> searchUserFlights(User u1) {
+		
+		ObservableList<Flights> obsFlights = FXCollections.observableArrayList();
+		
+		Connection conn = getConnection();
+		
+		String userTicketStr = "SELECT * FROM ticket WHERE user_email = ?";
+		
+		try {
+			
+			PreparedStatement preUserTicket = conn.prepareStatement(userTicketStr);
+			
+			preUserTicket.setString(1, u1.getEmail());
+			
+			ResultSet set = preUserTicket.executeQuery();
+			
+			while(set.next()) {
+				
+				int numberflight = set.getInt("numberflight");
+				
+				String pullFlight = "SELECT * FROM flights WHERE numberflight = ?";
+						
+				PreparedStatement prePullFlight = conn.prepareStatement(pullFlight);
+				
+				prePullFlight.setInt(1, numberflight);
+				
+				ResultSet result = prePullFlight.executeQuery();
+				
+				while(result.next()) {
+					
+					//get the information on a single flight
+					String airline = result.getString("airline");
+					String origin_city = result.getString("origin_city");
+					String destination_city = result.getString("destination_city");
+					int flightCapacity = result.getInt("capactiy");
+					int seats_available = result.getInt("seats_available");
+					int flightNumber = result.getInt("numberflight");
+					Date departure_date = result.getDate("departure_date");
+					Date arrivalDate = result.getDate("arrival_date");
+					String departure_time = result.getString("departure_time");
+					String arrival_time = result.getString("arrival_time");
+					int isFilled = result.getInt("isfull");
+					
+					boolean isFull;
+				
+					if (isFilled > 0) {
+						isFull = true;
+					}
+					else {
+						isFull = false;
+					}
+					//make a flight instance with the information
+					Flights f1 = new Flights(airline, origin_city, destination_city, flightCapacity, seats_available, flightNumber,
+								departure_date, arrivalDate, departure_time, arrival_time, isFull);
+					
+					obsFlights.add(f1);
+				}
+			}
+		}
+		catch (Exception e) {
+			PUCBox.display();
+			e.printStackTrace();			
+		}
+		
+		return obsFlights;
+	}
+
+	public static String getPassword(String P1) {
+
+        Connection conn = getConnection();
+      
+        String PassStr = "SELECT Password FROM Username WHERE Username = ?";
+
+        try {
+
+        	PreparedStatement prepassword = conn.prepareStatement(PassStr);
+
+        	prepassword.setString(1, P1);
+
+        	ResultSet set = prepassword.executeQuery();
+
+            while(set.next()) {
+
+            	String Password = set.getString("password");
+            	
+            	return Password;
+
+            }         
+
+        }
+        catch(NullPointerException npe) {
+
+        	AlertBox.display("Problem", "The Username You Are Trying To fined Does Not Seem To Exist");
+
+            npe.printStackTrace();
+
+        }
+
+        catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        return null;
+
+}
+
+	public static boolean removeFlight(Flights flight) {
+Connection conn = getConnection();
+		
+		String removeFlightStr = "DELETE FROM flights WHERE numberflight = ?";
+		
+		try {
+			PreparedStatement removeFlight = conn.prepareStatement(removeFlightStr);
+			
+			removeFlight.setInt(1, flight.getFlightNumber());
 			
 			removeFlight.executeUpdate();
 			
@@ -810,5 +948,4 @@ public class DBMethod {
 		return false;
 	}
 
-	
 }

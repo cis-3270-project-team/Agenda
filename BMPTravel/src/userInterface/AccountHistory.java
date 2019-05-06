@@ -1,7 +1,6 @@
 package userInterface;
 
 import database.DBMethod;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,6 +9,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import programBackbone.Admin;
@@ -18,26 +19,24 @@ import programBackbone.Flights;
 import programBackbone.Method;
 import programBackbone.User;
 
-public class SearchOutbound extends MainMenu{
+public class AccountHistory extends MainMenu {
 	
-	Stage window;
+	Button deleteBT, backBT, logOutBT;
 	
-	Scene scene;
-	
-	TableView<Flights> outbound;
+	TableView<Flights> flightTable;
 	
 	VBox vBox;
 	
-	HBox bottom;
+	HBox hBox;
 	
-	Button backBT, bookFlightBT;
+	Region emptySpace = new Region();
+	
+	Scene scene;
 	
 	
-	public void start(Stage primaryStage, User u1) {
+	public void start(Stage window, User u1) {
 		
-		window = primaryStage;
-		
-		window.setTitle("Search Outbound Flights");
+		window.setTitle("Account History");
 		
 		TableColumn<Flights, String> airline = new TableColumn<>("Airline");		
 		airline.setMinWidth(75);
@@ -67,13 +66,13 @@ public class SearchOutbound extends MainMenu{
 		seats.setMinWidth(30);
 		seats.setCellValueFactory(new PropertyValueFactory<>("seatsAvailable"));
 		
-		outbound = new TableView<>();
+		flightTable = new TableView<>();
 		
-		ObservableList<Flights> flights = FXCollections.observableArrayList(DBMethod.searchFlights());
+		ObservableList<Flights> flights = (DBMethod.searchUserFlights(u1));
 		
-		outbound.setItems(flights);
+		flightTable.setItems(flights);
 		
-		outbound.getColumns().addAll(airline, origin, destination, departureTime, arrivalTime, date, seats);
+		flightTable.getColumns().addAll(airline, origin, destination, departureTime, arrivalTime, date, seats);
 		
 		backBT = new Button("back");
 		
@@ -92,35 +91,44 @@ public class SearchOutbound extends MainMenu{
 			}
 		});
 		
-		bookFlightBT = new Button("Book Flight");
+		logOutBT = new Button("Logout");
 		
-		bookFlightBT.setOnAction(e -> {
+		logOutBT.setOnAction(e -> Method.mainMenu(window));
+		
+		deleteBT = new Button("Remove Flight");
+		
+		deleteBT.setOnAction(e -> {
 			
-			Flights f1 = (Flights) outbound.getSelectionModel().getSelectedItem();
+			ObservableList<Flights> obsFlight, allFlights;
 			
-			if(Method.bookFlight(u1, f1)) {	
-				
-				Method.searchReturn(window, u1);
+			Flights flight;
+			
+			allFlights = flightTable.getItems();
+			
+			obsFlight = flightTable.getSelectionModel().getSelectedItems();
+			
+			flight = flightTable.getSelectionModel().getSelectedItem();
+			
+			if (DBMethod.removeFlightTickes(flight)) {
+				obsFlight.forEach(allFlights::remove);
 			}
-			else {
-				AlertBox.display("We Are Sorry", "Something Went Wrong With Booking");
-			}
-		});
+			
+		});		
 		
-		
-		bottom = new HBox();
-		bottom.getChildren().addAll(backBT, bookFlightBT);
-		bottom.setPadding(new Insets(10, 10, 10, 10));
-		bottom.setSpacing(10);
+		hBox = new HBox();
+		hBox.setHgrow(emptySpace, Priority.ALWAYS);
+		hBox.getChildren().addAll(deleteBT, emptySpace, backBT, logOutBT);
+		hBox.setPadding(new Insets(8, 8, 8, 8));
+		hBox.setSpacing(8);
 		
 		vBox = new VBox();
-		
-		vBox.getChildren().addAll(outbound, bottom);
-		vBox.setPadding(new Insets(20.0, 20.0, 20.0, 20.0));
+		vBox.getChildren().addAll(flightTable, hBox);
+		vBox.setPadding(new Insets(8, 8, 8, 8));
+		vBox.setSpacing(8);
 		
 		scene = new Scene(vBox);
 		window.setScene(scene);
 		window.show();
 	}
-
+	
 }
