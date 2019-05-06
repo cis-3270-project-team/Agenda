@@ -1,5 +1,6 @@
 package userInterface;
 
+import database.DBMethod;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import programBackbone.Method;
 
 public class ForgotPasswordNext extends MainMenu {
 
@@ -27,13 +29,13 @@ public class ForgotPasswordNext extends MainMenu {
 
 	BorderPane pane; 
 	
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage, String userName) throws Exception {
 		
 		window = primaryStage; 
 		window.setTitle("Security Question"); 
 
 		messageLB = new Label("Please answer the following security question:" ); 
-		questionLB = new Label("Question from database"); 
+		questionLB = new Label(DBMethod.getSecurityQuestion(userName)); 
 		answerTF = new TextField(); 
 
 		EnterBT = new Button("Enter"); 
@@ -54,13 +56,10 @@ public class ForgotPasswordNext extends MainMenu {
 		grid.getChildren().addAll(messageLB, questionLB, answerTF, ExitBT, EnterBT); 
 
 		EnterBT.setOnAction(event -> {
-			ForgotPasswordFinal forgotpassword = new ForgotPasswordFinal();
-			try { 
-				forgotpassword.start(primaryStage);
-				}
-				catch (Exception e) {
-					e.printStackTrace(); 
-				}
+			
+			String pass = DBMethod.useSecurityAnswer(userName, answerTF.getText());
+			
+			Method.forgotStage3(window, userName, pass);
 			});
 		
 		scene = new Scene(grid, 650, 280);

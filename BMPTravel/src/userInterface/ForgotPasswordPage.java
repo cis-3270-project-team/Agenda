@@ -1,5 +1,6 @@
 package userInterface;
 
+import database.DBMethod;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -52,7 +53,18 @@ public class ForgotPasswordPage extends MainMenu {
 
 		grid.getChildren().addAll(UserNameLB, UserNameTF, EnterBT, ExitBT);
 		
-		EnterBT.setOnAction(event -> Method.forgotStage2(window));
+		EnterBT.setOnAction(event -> {
+			String userName = UserNameTF.getText();
+			
+			if(DBMethod.userNameExists(userName)) {
+				
+				Method.forgotStage2(window, userName);
+			}
+			else {
+				AlertBox.display("Invalid", "That Was Not A Valid User Name");
+			}
+			
+		});
 		
 		scene = new Scene(grid, 650, 280);
 		window.setScene(scene);

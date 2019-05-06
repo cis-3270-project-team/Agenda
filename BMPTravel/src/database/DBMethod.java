@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import programBackbone.Admin;
@@ -948,4 +947,65 @@ Connection conn = getConnection();
 		return false;
 	}
 
+	public static String getSecurityQuestion(String S) {
+
+		Connection conn = getConnection();
+
+		String PassStr = "SELECT security_question FROM user WHERE Username = ?";
+
+		try {
+			PreparedStatement presecurityQuestion = conn.prepareStatement(PassStr);
+
+			presecurityQuestion.setString(1, S);
+
+			ResultSet set = presecurityQuestion.executeQuery();
+
+			while(set.next()) {
+
+				String securityQuestion = set.getString("security_question");
+				return securityQuestion;
+			}
+
+		}
+		catch(NullPointerException npe) {
+			AlertBox.display("Problem", "The Security Question You Are Trying To find Does Not Seem To Exist, try again.");
+			npe.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+public static String useSecurityAnswer(String userName, String answer) {
+		
+		Connection conn = getConnection();
+		
+		String PassStr = "SELECT password FROM user WHERE username = ? AND security_answer = ?";
+		
+		try {
+			PreparedStatement presecurityAnswer = conn.prepareStatement(PassStr);
+		
+			presecurityAnswer.setString(1, userName);
+			presecurityAnswer.setString(2, answer);
+			
+			ResultSet set = presecurityAnswer.executeQuery();
+			
+			while(set.next()) {
+				
+				return set.getString("password");
+			}
+			
+		}
+		catch(NullPointerException npe) {
+			AlertBox.display("Problem", "The Security Answer You Are Trying To find Does Not Seem To Exist, try again.");
+			npe.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		AlertBox.display("Invalid", "Ther Answers Did Not Match");
+		return null;
+	}
 }

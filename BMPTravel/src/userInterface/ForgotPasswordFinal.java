@@ -24,12 +24,12 @@ public class ForgotPasswordFinal extends MainMenu {
 
 	BorderPane pane; 
 	
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage, String userName, String password) throws Exception {
 		window = primaryStage; 
 		window.setTitle("Credencials");
 
-		UserNameLB = new Label("get username"); 
-		PasswordLB = new Label("get password"); 
+		UserNameLB = new Label("Your User Name is:" + userName); 
+		PasswordLB = new Label("Your Password is:" + password); 
 
 		mainMenuBT = new Button("Main Menu"); 
 		 

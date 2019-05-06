@@ -17,6 +17,7 @@ import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
 import userInterface.AccountHistory;
 import userInterface.AlertBox;
+import userInterface.ForgotPasswordFinal;
 import userInterface.ForgotPasswordNext;
 import userInterface.ForgotPasswordPage;
 import userInterface.HomePage;
@@ -80,12 +81,12 @@ public class Method {
 		}
 	}
 
-	public static void forgotStage2 (Stage window) {
+	public static void forgotStage2 (Stage window, String name) {
 		
 		ForgotPasswordNext next = new ForgotPasswordNext();
 
 		try { 
-			next.start(window);
+			next.start(window, name);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -359,6 +360,18 @@ public class Method {
 				departureDate, arrivalDate, departureTime, arrivalTime, isFilled);
 	
 		return f1;
+	}
+
+	public static void forgotStage3(Stage window, String name, String pass) {
+		ForgotPasswordFinal forgotFinal = new ForgotPasswordFinal();
+		
+		try {
+			forgotFinal.start(window, name, pass);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }
