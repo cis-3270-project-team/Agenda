@@ -41,7 +41,7 @@ public class BMPSplash extends Application {
 		  fadeouttransition.setCycleCount(1);
 		  
 		  fadeouttransition.setOnFinished(e-> {
-			  Welcome login = new Welcome();
+			  MainMenu login = new MainMenu();
 			  try {
 				  login.start(stage);
 			  }catch(Exception e1) {
