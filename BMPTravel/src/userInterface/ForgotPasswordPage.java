@@ -43,19 +43,22 @@ public class ForgotPasswordPage extends Application {
 	ExitBT = new Button("Exit"); 
 	ExitBT.setOnAction(event -> closeProgram());
 	
-	
+	//creation of the screen and its dimensions 
 	GridPane grid = new GridPane();
 	grid.setPadding(new Insets(10, 10, 10, 10));
 	grid.setVgap(8); 
 	grid.setHgap(10);
 	
+	//location of all labels, TextField, and buttons
 	GridPane.setConstraints(UserEmailLB, 16, 5); 
 	GridPane.setConstraints(UserEmailTF, 17, 5);
 	GridPane.setConstraints(EnterBT, 17, 6);
 	GridPane.setConstraints(ExitBT, 34, 0);
 	
+	//adding the labels, TextField, and buttons to the grid
 	grid.getChildren().addAll(UserEmailLB, UserEmailTF, EnterBT, ExitBT);
 	
+	//set action for the button Enter, so that when someone click on it it sends to another screen -> forgotPasswordNext
 	EnterBT.setOnAction(event ->{
 		ForgotPasswordNext next = new ForgotPasswordNext();
 		try { 
@@ -66,12 +69,14 @@ public class ForgotPasswordPage extends Application {
 		}
 	});
 	
+	//window dimensions
 	scene = new Scene(grid, 650, 280);
 	window.setScene(scene);
 	
 	window.show(); 
 	
 	}
+	//method to close the window by clicking on theExit button, and saving all the actions
 	public void closeProgram() { 	
 		System.out.print("Action saved!");
 		window.close(); 
